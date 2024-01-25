@@ -1,0 +1,101 @@
+﻿  @model IMS_Model.CommonDropDown.ViewModel.SiteMst_vm
+
+
+<table id="tblStatusMst" class="table-bordered tabletable-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                SiteCode
+            </th>
+            <th>
+                StatusCode
+            </th>
+            <th>
+                EffectiveDate
+            </th>
+            <th>
+                Remarks
+            </th>
+            <th>
+                AddedBy
+            </th>
+            <th>
+                AddedOn
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.sStatusList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SiteCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusCode)
+                </td>
+                <td>
+                    @item.EffectiveDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Remarks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddedBy)
+                </td>
+                <td>
+                    @item.AddedOn.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    <a href="#" class="UpdateStatus" data-statusrno="@item.SrNo" data-statusid="@item.SiteStatusId" data-sitecode="@item.SiteCode" data-remark="@item.Remarks"
+                       data-statuscode="@item.StatusCode" data-effectivedt="@item.EffectiveDate"><i class="fa fa-edit"></i></a>
+                    &nbsp; &nbsp;
+                    <a href="#" class="DeleteStatus" data-statusrno="@item.SrNo" data-statusid="@item.SiteStatusId"><i class="fa fa-eraser"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        new DataTable("#tblStatusMst");
+    });
+
+
+    $(".UpdateStatus").click(function () {
+
+        var srno = $(this).data("statusrno");
+        var statusid = $(this).data("statusid");
+        var sitecode = $(this).data("sitecode");
+        var remark = $(this).data("remark");
+        var statuscode = $(this).data("statuscode");
+        var effectivedt = $(this).data("effectivedt");
+
+        $("#srnostatus").val(srno);
+        $("#statusId").val(statusid);
+        $("#sitecodestatus").val(sitecode);
+        $("#statusremark").val(remark);
+        $("#statuscode").val(statuscode);
+        $("#effecdt").val(effectivedt);
+
+        document.getElementById("AddStatus").disabled = true;
+        document.getElementById("UpdateStatus").disabled = false;
+    });
+
+    $(".DeleteStatus").click(function () {
+
+        var srno = $(this).data("statusrno");
+        var statusid = $(this).data("statusid");
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/SiteStatusDelete",
+            data: { AddSrNo: srno, StatusId: statusid },
+            cache: false,
+            success: function (data) {
+                $("#renderstatus").html(data);
+            },
+        });
+    });
+</script>

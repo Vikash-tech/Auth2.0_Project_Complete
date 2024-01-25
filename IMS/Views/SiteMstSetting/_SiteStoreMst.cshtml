@@ -1,0 +1,86 @@
+﻿  @model IMS_Model.CommonDropDown.ViewModel.SiteMst_vm
+
+
+<table id="tblStoreMst" class="table-bordered tabletable-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Site Code
+            </th>
+            <th>
+                Store Code
+            </th>
+            <th>
+                Store Description
+            </th>
+
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.siteStoreMst)
+        {
+            @if (item.ActStatus == 1)
+            {
+                <tr>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.SiteCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StoreCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StoreDesc)
+                </td>
+                <td>
+                    <a href="#" class="AddEdit" data-bulkstore="@item.iBulkSt" data-storesrno="@item.SrNo" data-storeid="@item.StoreId" data-storesite="@item.SiteCode" data-storecode="@item.StoreCode" data-storedec="@item.StoreDesc"><i class="fa fa-edit"></i></a>
+                    &nbsp; &nbsp;
+                        <a href="#" class="SiteStoreDelete"  data-storesrno="@item.SrNo" data-storeid="@item.StoreId"><i class="fa fa-eraser"></i></a>
+                </td>
+            </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        new DataTable("#tblStoreMst");
+    });
+
+
+    $(".AddEdit").click(function () {
+
+        var srno = $(this).data("storesrno");
+        var storeid = $(this).data("storeid");
+        var storesite = $(this).data("storesite");
+        var storecode = $(this).data("storecode");
+        var bulkstore = $(this).data("bulkstore");
+        var storedec = $(this).data("storedec");
+
+        $("#storesrno").val(srno);
+        $("#storeId").val(storeid);
+        $("#storesite").val(storesite);
+        $("#storecode").val(storecode);
+        $("#bulkstore").val(bulkstore);
+        $("#storedes").val(storedec);
+
+        document.getElementById("AddStore").disabled = true;
+        document.getElementById("UpdateStore").disabled = false;
+    });
+
+    $(".SiteStoreDelete").click(function () {
+
+        var srno = $(this).data("storesrno");
+        var storeid = $(this).data("storeid");
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/SiteStoreDelete",
+            data: { AddSrNo: srno, StoreId: storeid },
+            cache: false,
+            success: function (data) {
+                $("#renderstore").html(data);
+            },
+        });
+    });
+</script>

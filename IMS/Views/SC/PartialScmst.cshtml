@@ -1,0 +1,363 @@
+﻿
+@model IEnumerable<IMS_Model.SC.SCCreation.SCMst>
+
+<table id="tblMstlist" class="table-bordered table-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.TmpScId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScRegNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SCName)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCCompType)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCCIN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SCPAN)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCRegdState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SCGSTStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SCGST)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCPF)
+            </th>
+
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCESI)
+            </th>
+
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCBANK)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCBANKAcNo)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCBANKIFSC)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCExpConstInd)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCCNTDesig)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.MSMEStatus)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.RegisterNo)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.ValidUpto)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.MSMETurnOver)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.FinanceYear)
+            </th>
+
+
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCAdd1)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCAdd2)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCAdd3)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCCity)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCCountry)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCPin)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCPhNo)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.ScFaxNo)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCCntName)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCCntMob)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCCntEmail)
+            </th>
+            <th style="width:10%;">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.TmpScId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScRegNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SCName)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCCompType)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCCIN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SCPAN)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCRegdState)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SCGSTStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SCGST)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCPF)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCESI)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCBANK)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCBANKAcNo)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCBANKIFSC)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCExpConstInd)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.Remarks)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCCNTDesig)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.MSMEStatus)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.RegisterNo)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.ValidUpto)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.MSMETurnOver)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.FinanceYear)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCAdd1)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCAdd2)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCAdd3)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCCity)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCCountry)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCPin)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCPhNo)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.ScFaxNo)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCCntName)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCMobNo)
+                </td>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SCCntEmail)
+                </td>
+                <td>
+                    <a href="#" class="EditMst" data-tempsc="@item.TmpScId" data-regno="@item.ScRegNo" data-name="@item.SCName" data-compy="@item.SCCompType" data-sccin="@item.SCCIN"
+                       data-pan="@item.SCPAN" data-state="@item.SCRegdState" data-gststatus="@item.SCGSTStatus"
+                       data-scgst="@item.SCGST" data-scpf="@item.SCPF" data-scesi="@item.SCESI" data-bank="@item.SCBANK"
+                       data-bankac="@item.SCBANKAcNo" data-bankifsc="@item.SCBANKIFSC" data-sccontdesg="@item.SCCNTDesig"
+                       data-memsst="@item.MSMEStatus" data-register="@item.RegisterNo" data-msmeturn="@item.MSMETurnOver"
+                       data-finyear="@item.FinanceYear" data-cinnum="@item.SCCIN" data-reqsite="@item.SiteCode" data-category="@item.Category"
+
+                       data-panattach="@item.SCPANAttach" data-gstattach="@item.SCGSTAttach" data-pfattach="@item.SCPFAttach" data-esicattach="@item.SCESIAttach"
+                       data-chequeattach="@item.SCCHQAttac" data-mandateattach="@item.MandateAttach" data-msmeattach="@item.MSMEAttach" data-scattach="@item.SCAttch"
+                       data-add1="@item.SCAdd1" data-cyt="@item.SCAdd2" data-adgrd3="@item.SCAdd3"
+                       data-city="@item.SCCity" data-country="@item.SCCountry" data-pincode="@item.SCPin" data-phoneno="@item.SCPhNo"
+                       data-faxno="@item.ScFaxNo" data-cntperson="@item.SCCntName"
+                       data-mobileeno="@item.SCMobNo" data-emailid="@item.SCCntEmail">Select</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    //for Query table
+    $(document).ready(function () {
+        $('#tblMstlist').DataTable();
+    });
+
+    //Send data into Textbox
+    $(".EditMst").click(function () {
+
+        var reg = $(this).data("regno");
+        var name = $(this).data("name");
+        var compy = $(this).data("compy");
+        var cinno = $(this).data("cinnum");
+        var pan = $(this).data("pan");
+        var regstate = $(this).data("state");
+        var gststatus = $(this).data("gststatus");
+        var scgst = $(this).data("scgst");
+        var scpf = $(this).data("scpf");
+        var scesi = $(this).data("scesi");
+        var bank = $(this).data("bank");
+        var bankac = $(this).data("bankac");
+        var bankifsc = $(this).data("bankifsc");
+        var msmes = $(this).data("memsst");
+        var register = $(this).data("register");
+        var msmeturn = $(this).data("msmeturn");
+        var finyear = $(this).data("finyear");
+        var site = $(this).data("reqsite");
+        var Category = $(this).data("category");
+
+        var PanAttid = $(this).data('panattach');
+        var GstAttid = $(this).data('gstattach');
+        var PfAttid = $(this).data("pfattach");
+        var EsicAttid = $(this).data("esicattach");
+        var CheqAttid = $(this).data("chequeattach");
+        var MandAttid = $(this).data("mandateattach");
+        var MsmeAttid = $(this).data("msmeattach");
+        var SCAttid = $(this).data("scattach");
+
+        $("#SCRegNo").val(reg);
+        $("#SCName").val(name);
+        $("#compy").val(compy);
+        $("#txtuni").val(cinno);
+        $("#Panno").val(pan);
+        $("#State").val(regstate);
+        $("#Gst").val(gststatus);
+        $("#gstno").val(scgst);
+        $("#pfno").val(scpf);
+        $("#esicno").val(scesi);
+        $("#banks").val(bank);
+        $("#ACno").val(bankac);
+        $("#Ifsc").val(bankifsc);
+        $("#Msmestatus").val(msmes);
+        $("#regno").val(register);
+        $("#turnover").val(msmeturn);
+        $("#typeEnterprise").val(Category);
+
+
+        $("#finan").val(finyear);
+        $("#Sitelist").val(site);
+
+        $("#Panattchid").val(PanAttid);
+
+        //for Rending list Partial view
+
+        var tempscid = $(this).data('tempsc');
+
+        $.ajax({
+            type: 'GET',
+            url: '/SC/AddressMst',
+            data: { Tempscid: tempscid },
+            success: function (result) {
+                $('#address').html(result);
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '/SC/EquipmentMst',
+            data: { eqipid: tempscid },
+            success: function (result) {
+                $('#PartialEquipment').html(result);
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '/SC/AssociateMst',
+            data: { eqipid: tempscid },
+            success: function (result) {
+                $('#PartialAssoci').html(result);
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '/SC/ExperienceMst',
+            data: { eqipid: tempscid },
+            success: function (result) {
+                $('#PartialExp').html(result);
+            }
+        });
+
+
+        $.ajax({
+            type: 'GET',
+            url: '/SC/Attach',
+            data: {
+                SCPANAttach: PanAttid,
+                SCGSTAttach: GstAttid,
+                SCPFAttach: PfAttid,
+                SCESIAttach: EsicAttid,
+                SCCHQAttac: CheqAttid,
+                MandateAttach: MandAttid,
+                MSMEAttach: MsmeAttid,
+                SCAttch: SCAttid
+            },
+            success: function (result) {
+                $('#AttachPartial').html(result);
+            }
+        });
+
+        var Addmodal = document.getElementById("btnpedSCopen");
+        Addmodal.style.display = "none";
+    });
+</script>
+
+

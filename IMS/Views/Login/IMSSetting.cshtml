@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMS Setting</title>
+    <style>
+
+        .card-row {
+            margin-top: 15px;
+        }
+
+        .cardhover {
+            background-color: aliceblue;
+        }
+
+            .cardhover:hover {
+                background-color: cadetblue;
+                transform: scale(1.05);
+                transition: transform 0.3s ease;
+            }
+
+        .txtcenter {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="row">
+                    <h5>IMS Setting</h5>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <h3>Company Setting</h3>
+                <div class="row card-row">
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="CompTypeIndex" asp-controller="CompTypeMst">Company Type Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="CountryIndex" asp-controller="CountryMst">Country Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="Index" asp-controller="StateMst">Create State Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="AddressTypeIndex" asp-controller="AddressTypeMst">Address Type Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row card-row">
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="Index" asp-controller="CompConfg">Create Company Configuration</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="Index" asp-controller="CompanyMst">Company Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="Index" asp-controller="ParameterMst">Create Parameter / Values</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="Index" asp-controller="SiteMstSetting">Site Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row card-row">
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="Index" asp-controller="RoleMstSetting">Role Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="Index" asp-controller="ClaimMstSetting">Claims Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card cardhover">
+                            <div class="card-body txtcenter">
+                                <a type="button" class="btn btn-success" asp-action="Index" asp-controller="RoleClaimMst">Role Claim Master</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        var userCode = "12558";
+        var siteId = 16;
+        var menuId = 969;
+        ButtonsRight(userCode, siteId, menuId);
+    });
+
+</script>

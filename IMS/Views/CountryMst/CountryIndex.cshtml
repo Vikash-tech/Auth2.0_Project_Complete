@@ -1,0 +1,128 @@
+﻿@model IMS_Model.CommonDropDown.CountryMst
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+
+            if (successMessage !== "") {
+                alert(successMessage);
+                window.location.href = "../CountryMst/CountryIndex";
+            } else if (errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+    </script>
+    <style>
+        .firstrow {
+            margin-top: -15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+        <form method="post">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Country Master Creation </h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+                            <a type="button" class="btn btn-secondary custombtn" asp-action="IMSSetting" asp-controller="Login" title="IMS Setting"><i class="fa fa-gear"></i></a>
+                            @* for buttons *@
+                            @if (Model != null)
+                            {
+                                @if (Model.CtId > 0)
+                                {
+                                    <button type="submit" class="btnUpdate btn btn-outline-primary custombtn" asp-action="CountryIndex" title="Update">
+                                        <i class="fa fa-random"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btnAdd btn btn-success custombtn" asp-action="CountryIndex" title="Save">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" class="btnAdd btn btn-success custombtn" asp-action="CountryIndex" title="Save">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row firstrow">
+                        @if (Model != null)
+                        {
+                            <input asp-for="CtId" hidden class="form-control" />
+                        }
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="CtCode" class="control-label"></label>
+                                <input asp-for="CtCode" class="form-control" />
+                                <span asp-validation-for="CtCode" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="CtName" class="control-label"></label>
+                                <input asp-for="CtName" class="form-control" />
+                                <span asp-validation-for="CtName" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="CtIsdCod" class="control-label"></label>
+                                <input asp-for="CtIsdCod" class="form-control" />
+                                <span asp-validation-for="CtIsdCod" class="text-danger"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12" id="PartialCountryMst">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    $(document).ready(function () {
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+
+        GetClaimMstList();
+    });
+
+    function GetClaimMstList() {
+
+        $.ajax({
+            type: 'POST',
+            url: '../CountryMst/_CountryMstList',
+            data: {},
+            cache: false,
+            success: function (data) {
+                $('#PartialCountryMst').html(data);
+            },
+        });
+    }
+</script>

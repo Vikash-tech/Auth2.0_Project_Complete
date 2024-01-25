@@ -1,0 +1,46 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+
+    <link href="~/cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.css" rel="stylesheet" />
+    <script src="~/cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js"></script>
+
+
+    <script>
+
+        var ok = '@ViewBag.Success';
+        var error = '@TempData["Error"]';
+
+        if (ok != null && ok !== "") {
+            toastr.success(ok);
+        }
+        else if (error != null && error !== "") {
+            toastr.error(error);
+        }
+
+    </script>
+</head>
+<body>
+    <div class="containers-style">
+        <br />
+        <center>
+            <h1>Welcome To IMS</h1>
+        </center>
+    </div>
+</body>
+</html>
+
+
+<script>
+    $(document).ready(function () {
+
+        let sUserCode = '@ViewBag.sUserCode';
+        let iSiteId = '@ViewBag.iSiteId';
+        let MenuId = '@ViewBag.MenuId';
+
+        ButtonsRight(sUserCode, iSiteId, MenuId);
+    });
+</script>
+

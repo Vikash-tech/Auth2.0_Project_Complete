@@ -1,0 +1,115 @@
+﻿@model IMS_Model.SettingModel.IMSClaimMaster
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script>
+         $(document).ready(function () {
+             var successMessage = '@TempData["Success"]';
+             var errorMessage = '@TempData["Error"]';
+
+             if (successMessage !== "") {
+                 alert(successMessage);
+             } else if (errorMessage !== "") {
+                 alert(errorMessage);
+             }
+         });      
+    </script>
+    <style>
+        .firstrow {
+            margin-top: -15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+        <form method="post">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Claim Master Creation </h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+                            @* for buttons *@
+                            <a type="button" class="btn btn-outline-dark custombtn" asp-controller="ClaimMstSetting" asp-action="ClaimCreation" title="Refresh"><i class="fa fa-refresh"></i></a>
+                            @if (Model != null)
+                            {
+                                @if (Model.Id > 0)
+                                {
+                                    <button type="submit" class="btn btn-outline-primary custombtn" asp-action="Edit" title="Update"><i class="fa fa-random"></i></button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-success custombtn" asp-action="ClaimCreation" title="Save"><i class="fa fa-save"></i></button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success custombtn" asp-action="ClaimCreation" title="Save"><i class="fa fa-save"></i></button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row firstrow">
+                        @if (Model != null)
+                        {
+                            <input asp-for="Id" hidden class="form-control" />
+                        }
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="ClaimType" class="control-label"></label>
+                                <input asp-for="ClaimType" class="form-control" />
+                                <span asp-validation-for="ClaimType" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="ClaimValue" class="control-label"></label>
+                                <input asp-for="ClaimValue" class="form-control" />
+                                <span asp-validation-for="ClaimValue" class="text-danger"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <br />
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div id="PartialClaimMstLst"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+
+        GetClaimMstList();
+
+    });
+
+    function GetClaimMstList() {
+
+        $.ajax({
+            type: 'POST',
+            url: '../ClaimMstSetting/_ClaimsMstList',
+            data: {},
+            cache: false,
+            success: function (data) {
+                $('#PartialClaimMstLst').html(data);
+            },
+        });
+    }
+</script>

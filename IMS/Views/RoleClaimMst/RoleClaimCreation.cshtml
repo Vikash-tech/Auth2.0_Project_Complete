@@ -1,0 +1,114 @@
+﻿@model IMS_Model.SettingModel.IMSRoleClaimMaster
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+
+            if (successMessage !== "") {
+                alert(successMessage);
+            } else if (errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+    </script>
+    <style>
+        .firstrow {
+            margin-top: -15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+        <form method="post">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Role Claim Master Creation </h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+                            @* for buttons *@
+                            <a type="button" class="btn btn-outline-dark custombtn" asp-controller="RoleClaimMst" asp-action="Index" title="Back"><i class="fa fa-backward"></i></a>
+                            @if (Model != null)
+                            {
+                                @if (Model.Id > 0)
+                                {
+                                    <button type="submit" class="btn btn-outline-primary custombtn" asp-action="Edit" title="Update"><i class="fa fa-random"></i></button>
+                                }
+                            }
+
+                            <button type="submit" class="btn btn-success custombtn" asp-action="RoleClaimCreation" title="Save"><i class="fa fa-save"></i></button>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row firstrow">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="RoleId" class="control-label"></label>
+                                <input asp-for="RoleId" class="form-control" />
+                                <span asp-validation-for="RoleId" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="ClaimValue" class="control-label"></label>
+                                <input asp-for="ClaimValue" class="form-control" />
+                                <span asp-validation-for="ClaimValue" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="ClaimType" class="control-label"></label>
+                                <input asp-for="ClaimType" class="form-control" />
+                                <span asp-validation-for="ClaimType" class="text-danger"></span>
+                            </span>
+                        </div>
+
+
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="MenuId" class="control-label"></label>
+                                <input asp-for="MenuId" type="text" class="form-control" />
+                                <span asp-validation-for="MenuId" class="text-danger"></span>
+                            </span>
+                        </div>
+
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Active Status
+                                <br />
+                                <input asp-for="ActiveStatus" type="checkbox" />
+                                &nbsp;
+                                Active Status
+                                <span asp-validation-for="ActiveStatus" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        ButtonsRight();
+    });
+</script>

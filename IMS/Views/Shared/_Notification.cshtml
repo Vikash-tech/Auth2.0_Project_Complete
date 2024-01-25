@@ -1,0 +1,16 @@
+﻿<!-- _Notification.cshtml -->
+@if (TempData["success"] != null || TempData["error"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/toastr.js"></script>
+}
+
+@if (TempData["success"] != null)
+{
+    <script>toastr.success('@TempData["success"]')</script>
+}
+
+@if (TempData["error"] != null)
+{
+    <script>toastr.error('@TempData["error"]')</script>
+}

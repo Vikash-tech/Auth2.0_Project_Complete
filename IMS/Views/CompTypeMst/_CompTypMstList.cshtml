@@ -1,0 +1,53 @@
+﻿@model IEnumerable<IMS_Model.CommonDropDown.CompTypMst>
+
+
+<table id="tblCompTypeMstList" class="table-bordered table-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CtmId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CtmDesc)
+            </th>
+            <th>
+                Added On
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CtmId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CtmDesc)
+                </td>
+                <td>
+                    @item.AddedOn.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @Html.ActionLink("", "CompTypeIndex", new { CtmId=item.CtmId },new { @class = "btnUpdate fa fa-edit" })&emsp;&emsp;
+                    @Html.ActionLink("", "Delete", new { CtmId = item.CtmId }, new {  @class = "btnUpdate fa fa-trash",onclick = "return confirm('Are you sure you want to delete this item?');" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<script>
+    $(document).ready(function () {
+
+        new DataTable('#tblCompTypeMstList', {
+            paging: false,
+            scrollX: true,
+            scrollY: 300
+        });
+
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+    });
+</script>

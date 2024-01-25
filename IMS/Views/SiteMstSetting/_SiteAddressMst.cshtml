@@ -1,0 +1,134 @@
+﻿  @model IMS_Model.CommonDropDown.ViewModel.SiteMst_vm
+
+
+<table id="tblSiteAddMst" class="table-bordered tabletable-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+@*             <th>
+                Address Type
+            </th> *@
+            <th>
+                Address 1
+            </th>
+            <th>
+                Address 2
+            </th>
+            <th>
+                Address 3
+            </th>
+            <th>
+                Pin Code
+            </th>
+            <th>
+                Mobile No.
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.siteAddressMst)
+        {
+            @if (item.ActStatus == true)
+            {
+                <tr>
+
+@*                     <td>
+                        @if (item.SiteAddType == 1)
+                        {
+                            @Html.DisplayFor(modelItem => "Regd.Office")
+                        }
+                        else if (item.SiteAddType == 2)
+                        {
+                            @Html.DisplayFor(modelItem => "Cortp.Office")
+
+                        }
+                        else if (item.SiteAddType == 3)
+                        {
+                            @Html.DisplayText(modelItem => "Bill To")
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => "Ship To")
+                        }
+                    </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Add1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Add2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Add3)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SitePin)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNo)
+                    </td>
+                    <td>
+                        <a href="#" class="AddressEdit" data-addsrno="@item.AddSrNo" data-siteaddid="@item.SiteAddId" data-addtype="@item.SiteAddType" data-add1="@item.Add1" data-add2="@item.Add2" data-add3="@item.Add3"
+                           data-conty="@item.CtId" data-state="@item.StId" data-city="@item.City" data-stpin="@item.SitePin" data-phone="@item.PhoneNo"><i class="fa fa-edit"></i></a>
+                        &nbsp; &nbsp;
+                        <a href="#" class="SiteAddressDelete" data-addsrno="@item.AddSrNo" data-siteaddid="@item.SiteAddId"><i class="fa fa-eraser"></i></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        new DataTable("#tblSiteAddMst");
+    });
+
+    $(".AddressEdit").click(function () {
+
+        var SiteAddId = $(this).data("siteaddid");
+        var SiteSrNo = $(this).data("addsrno");
+        var Addrsstype = $(this).data("addtype");
+
+        var Add1 = $(this).data("add1");
+        var Add2 = $(this).data("add2");
+        var Add3 = $(this).data("add3");
+        var County = $(this).data("conty");
+        var State = $(this).data("state");
+        var City = $(this).data("city");
+        var Stpin = $(this).data("stpin");
+        var phone = $(this).data("phone");
+
+        $("#siteaddId").val(SiteAddId);
+        $("#SiteSrNo").val(SiteSrNo);
+        $("#AddressType").val(Addrsstype);
+        $("#AddressLine1").val(Add1);
+        $("#AddressLine2").val(Add2);
+        $("#AddressLine3").val(Add3);
+        $("#Country").val(County);
+        $("#State").val(State);
+        $("#ddlCity").val(City);
+        $("#Pincode").val(Stpin);
+        $("#Phone").val(phone);
+
+        document.getElementById("Addpopup").style.display = "block";
+        document.getElementById("Addaddress").disabled = true;
+        document.getElementById("UpdateAddress").disabled = false;
+    });
+
+
+    $(".SiteAddressDelete").click(function () {
+
+        var SiteAddId = $(this).data("siteaddid");
+        var SiteSrNo = $(this).data("addsrno");
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/SiteAddDelete",
+            data: { AddSrNo: SiteSrNo, SCAddressId: SiteAddId },
+            cache: false,
+            success: function (data) {
+                $("#renderPartialAddView").html(data);
+            },
+        });
+    });
+
+</script>

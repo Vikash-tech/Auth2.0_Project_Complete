@@ -1,0 +1,888 @@
+﻿
+@model IMS_Model.SC.SCCreation.SCViewModel
+
+<!DOCTYPE html>
+<html>
+<head>  
+</head>
+<body style="background-color:lightgray;display:block" id="content" >
+    
+     <div class="row col-md-12 col-sm-12">
+        <div class="col-md-6 col-sm-6" style="background-color:darkgrey; height:24px;">
+            <span class="Pagetitle" id="headtitle">List of Registered Sub Contractors</span>
+            <span class="arrowred" style="margin-right:-23px ; margin-top:4px"></span>
+            <span class="arrowyellow" style="margin-right:-19px ; margin-top:4px"></span>
+            <span class="arrowred" style="margin-right:-15px ; margin-top:4px"></span>
+        </div>
+        <div class="col-md-6 col-sm-6" style="text-align:end;margin-top:2px;">
+            <div class="bt">
+
+           <a type="button" id="btnpedSC" class="btn btn-outline-success" asp-action="Index" style="width: 50px;height: 25px;font-size: 10px;" title="Back"><i class="fa fa-backward"></i></a>
+       
+            </div>
+        </div>
+        </div>
+                       <div class="container-style">
+                        <div class="row" style="margin-top:5px;">
+                            <div class="col-md-2 col-sm-2">
+                                <span>
+                                      SC Reg No                         
+                                   <input asp-for="SCMst.ScRegNo" placeholder="" class="form-control form-text "  disabled />
+           
+                                </span>
+                            </div>
+
+                            <div class="col-md-8 col-sm-8">
+                                <span>
+                                    SC Name*
+                                     <input asp-for="SCMst.SCName" class="form-control form-text" id="SCName" style="text-transform:uppercase" placeholder="Sub-Contractor Name" maxlength="50"  disabled/>                                 
+                                </span>
+                            </div>
+
+                            <div class="col-md-2 col-sm-2">
+                                <span>
+                                    Company Type*
+                                    <select asp-for="SCMst.SCCompType" class="form-control form-text" id="compy" disabled>
+                                        <option>--Select--</option>
+                                     @foreach(var comp in ViewBag.compty)
+                                    {
+                                      <option value="@comp.CtmId">@comp.CtmDesc</option>
+                                    }
+                                    </select>
+                                 
+
+                                </span>
+                            </div>                
+                        </div>     
+                        
+        <div class="tabset" style="margin-top:10px;">
+            <!-- Tab 1 -->
+            <input type="radio" name="tabset" id="tab1" aria-controls="basic" checked>
+            <label for="tab1">Address Details</label>
+            <!-- Tab 2 -->
+            <input type="radio" name="tabset" id="tab2" aria-controls="statutory">
+            <label for="tab2">Statutory Details</label>
+            <!-- Tab 3 -->
+            <input type="radio" name="tabset" id="tab3" aria-controls="bank">
+            <label for="tab3">Bank Details / TurnOver</label>
+            <!-- Tab 4 -->
+            <input type="radio" name="tabset" id="tab4" aria-controls="equip">
+            <label for="tab4">Equipment</label>
+            <!-- Tab 5 -->
+            <input type="radio" name="tabset" id="tab5" aria-controls="associ">
+            <label for="tab5">Associate Company</label>
+            <!-- Tab 6 -->
+            <input type="radio" name="tabset" id="tab6" aria-controls="exp">
+            <label for="tab6">Experience</label>
+            <!-- Tab 7 -->
+            <input type="radio" name="tabset" id="tab7" aria-controls="attach">
+            <label for="tab7">Attachment</label>
+
+            <div class="tab-panels">      
+                <div id="basic" class="tab-panel">
+                    <div class="row" style="margin-top:-25px;">               
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    Address Line 1*
+                                    <input type="text" class="form-control form-text" id="Address1" maxlength="100" disabled/>
+                                    <input type="text" class="form-control form-text" id="txtsrno" hidden />
+                                    <input type="text" class="form-control form-text" id="txtaddid" hidden  />
+                                </span>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    Address Line 2
+                                    <input type="text" class="form-control form-text" id="Address2" name="Addres2" maxlength="100" disabled/>
+                                </span>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    Address Line 3
+                                    <input type="text" class="form-control form-text" id="Address3" name="Addres3" maxlength="100" disabled/>
+                                </span>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    City/Tehsil
+                                    <input type="text" class="form-control form-text" id="City" name="City/Tehsil" maxlength="50" disabled/>
+                                </span>
+                            </div>                   
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row" style="margin-top:5px">
+                            <div class="col-md-1 col-sm-1 ">
+                                <span>
+                                    Country
+                                    <select id="Option" class="form-control  form-text"  name="Country" disabled>
+                                        <option value="India">India</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <div class="col-md-2 col-sm-2">
+                                <span>
+                                    Pincode
+                                    <input type="number" class="form-control form-text" id="Pincode" disabled maxlength="6" />
+                                </span>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    Phone No
+                                <input type="tel" class="form-control form-text" id="Phone" pattern="^[0-9]{0,10}$" maxlength="10" disabled />
+                                </span>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3 ">
+                                <span>
+                                    Fax No
+                                    <input type="number" class="form-control  form-text" id="fax" name="Fax No" maxlength="10" disabled />
+                                </span>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3 ">
+                                <span>
+                                    Name of Contact person
+                                    <input type="text" class="form-control form-text" id="contper" disabled maxlength="50" />
+                                </span>
+                            </div>
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                    <div class="row " style="margin-top:5px">
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    Designation 
+                                    <input type="text" class="form-control form-text" id="designat" name="Designation" maxlength="50" disabled/>
+                                </span>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    Mobile No* 
+                                    <input type="number" class="form-control  form-text" id="mobile" name="Mobile No" maxlength="10" disabled />
+                                </span>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    Email Id 
+                                    <input type="email" class="form-control form-text" id="emails"  name="Email Id" maxlength="100" disabled />
+                                </span>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3" style="padding-top:20px">
+
+                                <span>
+                             
+                               <button class="btn btn-success" id="AddressADD" disabled onclick="AddAddress();"><i class="fa fa-plus"></i>Add</button>
+                               <button class="btn btn-primary" disabled id="Addressupdate">Update</button>
+                                </span>
+                            </div>
+                    </div>                    
+                    <div class="clearfix"></div>                                   
+                    <hr />
+
+                    <div class="row" style="margin-top:5px ; padding:5px">
+                      <div id="address" class="col-md-12">
+             
+                      <table id="table1" class="table-bordered tabletable-responsive-md" style="width:100%">
+                           <thead>   
+                             
+                               <tr>
+                                <th>Address Line 1</th>
+                                <th style="display:none">Address Line 2</th>
+                                <th style="display:none">Address Line 3</th>
+                                <th>City</th>
+                                <th style="display:none">Country</th>
+                                <th>Pincode</th>
+                                <th>PhoneNo</th> 
+                                <th style="display:none">FaxNo </th>
+                                <th>CntPerson</th> 
+                                 <th style="display:none">Desiganation</th> 
+                                 <th style="display:none">MobileNo</th> 
+                                 <th>EmailId</th> 
+                                 <th>Action</th> 
+                               </tr>
+                           </thead>
+                           <tbody>
+                                @if (Model.SCAddresses != null)
+                                {
+                                    @foreach (var item in Model.SCAddresses.ToList())
+                                    {
+                                        <tr>
+                                            <td>@item.SCAdd1</td>
+                                            <td style="display:none">@item.SCAdd2</td>
+                                            <td style="display:none">@item.SCAdd3</td>
+                                            <td>@item.City</td>
+                                            <td style="display:none" >@item.Country</td>
+                                            <td>@item.Pincode</td>
+                                            <td>@item.PhoneNo</td>
+                                            <td style="display:none">@item.FaxNo</td>
+                                            <td>@item.CntPerson</td>
+                                            <td style="display:none">@item.Desiganation</td>
+                                            <td style="display:none">@item.MobileNo</td>
+                                            <td>@item.EmailId</td>
+                                            <td>
+                                                <a href="#" class="AddressEdit" data-srno="@item.SRNO" data-addid="@item.SCAddressId" data-add1="@item.SCAdd1" data-cyt="@item.SCAdd2" data-adgrd3="@item.SCAdd3"
+                                                   data-city="@item.City" data-country="@item.Country" data-ppincode="@item.Pincode" data-phoneno="@item.PhoneNo"
+                                                   data-faxno="@item.FaxNo" data-cntperson="@item.CntPerson"
+                                                   data-desiganation="@item.Desiganation" data-mobileeno="@item.MobileNo" data-emailid="@item.EmailId">Select</a>
+
+                                            </td>
+
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+
+                       </table>
+                   </div>
+                  
+                </div>
+
+                </div>
+
+
+                <div id="statutory" class="tab-panel">
+
+                    <div class="row" style="margin-top:-25px;">                      
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    Unique CIN/LLPIN No.
+                                    <input asp-for="SCMst.SCCIN" id="txtuni" class="form-control form-text" disabled/>
+                                </span>
+                            </div>
+                            <div class="col-md-3 col-sm-3 ">
+                                <span>
+                                    PAN No.
+                                    <input asp-for="SCMst.SCPAN" id="Panno"class="form-control form-text" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10" disabled/>
+                                </span>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    GST Registeration Status
+                                    <select asp-for="SCMst.SCGSTStatus" id="Gst" class="form-control form-text" disabled>
+                                   <option value="">--Select--</option>
+                                    @foreach(var state in ViewBag.GST){
+                                   <option value="@state.ParamValueTxt">@state.ParamValDispTxt</option>
+                                    }                              
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <span>
+                                    GST Regd State
+                                    <select asp-for="SCMst.SCRegdState" class="form-control form-text" id="State" disabled>
+                                    <option value="">--Select--</option>
+                                    @foreach(var state in ViewBag.statelist){
+                                   <option value="@state.StId">@state.StName</option>
+                                    }
+                                    </select>
+                                </span>
+                            </div>
+                    </div>                  
+
+                    <div class="row" style="margin-top:5px">
+                            <div class="col-md-2 col-sm-2">
+                                <span>
+                                    GSTIN No.
+                                    <input asp-for="SCMst.SCGST" id="gstno"class="form-control form-text" pattern="[0-9A-Z]{15}" maxlength="20" style="align-content:center" disabled/>
+                                </span>
+                            </div>
+
+                            <div class="col-md-2 col-sm-2">
+                                MSME Status
+                                <select asp-for="SCMst.MSMEStatus" id="Msmestatus"  class="form-control form-text" disabled>
+                                 <option value="">--Select--</option>
+                                    @foreach(var state in ViewBag.msme){
+                                   <option value="@state.ParamValueTxt">@state.ParamValDispTxt</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-2 col-sm-2 ">
+                                <span>
+                                    Type of Enterprise                                 
+                                    <select typeof="Option" class="form-control form-text" id="typeEnterprise" disabled>
+                                    <option value="">--Select--</option>
+                                    @foreach(var state in ViewBag.Enterprise){
+                                   <option value="@state.ParamValueTxt">@state.ParamValDispTxt</option>
+                                    }
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <span>
+                                    Regn. Certificate No
+                                    <input asp-for="SCMst.RegisterNo" id="regno" class="form-control form-text" style="align-content:center" maxlength="50" disabled/>
+                                </span>
+                            </div>
+
+                            <div class="col-md-2 col-sm-2">
+                                <span>
+                                    PF Regd. No.
+                                    <input asp-for="SCMst.SCPF" class="form-control form-text" id="pfno" pattern="[A-Z]{2}/[A-Z]{3}/[0-9]{5}" maxlength="25" disabled/>
+                                </span>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                               <span>
+                                    ESIC Regn. No.
+                                    <input asp-for="SCMst.SCESI" class="form-control form-text" id="esicno" pattern="[0-9]{17}" maxlength="25" disabled/>
+                                </span>
+                            </div>
+                      
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+
+                <div id="bank" class="tab-panel">
+                    <div class="row"style="margin-top:-25px;">                  
+                        <div class="col-md-3 col-sm-3">
+                        <span>
+                        Site
+                        <select asp-for="SCMst.SiteCode" class="form-control form-text" id="sitelocation" disabled>                                 
+                        <option value="">--Select--</option>
+                        @foreach(var state in ViewBag.Site){
+                        <option value="@state.ParamValueTxt">@state.ParamValDispTxt</option>
+                        }
+                        </select>
+                      
+                        </Span>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <span>
+                                Bank Name* 
+                                <Input asp-for="SCMst.SCBANK" class="form-control form-text" id="banks" disabled>                                
+                         
+                            </span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <span>
+                                A/C No* 
+                                <input asp-for="SCMst.SCBANKAcNo" class="form-control  form-text" id="ACno"  disabled/>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                IFSC Code* 
+                                <input asp-for="SCMst.SCBANKIFSC" class="form-control  form-text" id="Ifsc"  disabled/>
+                            </span>
+                        </div>
+
+                        </div>
+                                          
+                          <div class="break" style="margin-top:10px;margin-top:10px ;background-color:lightcyan" disabled>
+                            <span>
+                                TurnOver
+                           </span>
+                         </div>
+
+                        <div class="row"style="margin-top:5px">
+                        <div class="col-md-2 col-sm-2 ">
+                            <span>
+                                Exp. In Industry
+                                <input asp-for="SCMst.SCExpConstInd" class="form-control  form-text" id="industry" style="align-content:center" maxlength="25" disabled/>
+                            </span>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <span>
+                                Referred By
+                                <input asp-for="SCMst.ReferredBy" class="form-control  form-text" id="referred" style="align-content:center" maxlength="25" disabled/>
+                            </span>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <span>
+                                Spl. Notes (if any)
+                                <input type="text" class="form-control  form-text" id="splnote" style="align-content:center" maxlength="14" disabled/>
+                            </span>
+                        </div>
+                    
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row"style="margin-top:5px">     
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Year 1
+                                <input type="number" id="year1" class="form-control  form-text" style="align-content:center" maxlength="5" disabled/>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Turnover
+                                <input type="number" id="turnover1" class="form-control  form-text" style="align-content:center" maxlength="8" disabled/>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Year 2
+                                <input type="number" id="Year2" class="form-control  form-text" style="align-content:center" maxlength="5" disabled/>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2 ">
+                            <span>
+                                Turnover
+                                <input type="number" id="Turnover2" class="form-control form-text" style="align-content:center" maxlength="8"  disabled/>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Year 3
+                                <input type="number" id="Year3" class="form-control  form-text" style="align-content:center" maxlength="5" disabled/>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Turnover
+                                <input type="number" id="Turnover3" class="form-control form-text" style="align-content:center" maxlength="8" disabled/>
+                            </span>
+                        </div>                   
+                </div>
+                <div class="clearfix"></div> 
+                
+                </div>
+
+
+                <div id="equip" class="tab-panel">
+                    <div class="row"style="margin-top:-25px;">
+                      <div class="col-md-3 col-sm-3">
+                                <span>          
+                                Equipment Description
+                             <input type="text" id="equipdesc" class="form-control form-text" maxlength="50" disabled>
+                             <input type="text" id="textequisrno" hidden class="form-control form-text">
+                              <input type="text" id="textequiid" hidden class="form-control form-text">
+                                </span>
+                                  </div>
+
+                      <div class="col-md-2  col-sm-2">
+                           <span>          
+                              Make
+                             <input type="text" id="make" class="form-control form-text" maxlength="50" disabled>
+                                </span>
+                                  </div>
+                                
+                      <div class="col-md-2 col-sm-2">
+                           <span>  
+                              Model
+                             <input type="text" id="model" class="form-control form-text" maxlength="50" disabled>
+                                </span>
+                                  </div>
+
+                           <div class="col-md-1 col-sm-1">
+                           <span>  
+                              Number 
+                             <input type="number" id="number" class="form-control form-text" maxlength="25" disabled>
+                                </span>
+                                  </div>
+
+                        <div class="col-md-1 col-sm-1"></div>
+                        <div class="col-md-3 col-sm-3" style="padding-top:25px">
+                                                                        
+                         <button type="button" class="btn btn-success" disabled onclick="Addequipment();" id="equiadd"><i class="fa fa-plus"></i>Add</button>                     
+                         <button type="button" class="btn btn-primary"id="equipUpdate" disabled></i>Update</button>
+                                                          
+                        </div>
+
+                          </div>
+                           
+                            <div class="container-fluid" style="margin-top:5px;padding:5px;">                                          
+                            <table id="table2" class="table-bordered table-responsive-md" style="width:100%">
+                                <thead>                               
+                                    <tr>                                                                    
+                                     
+                                        <th>Equipment Description</th>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>No. Of Equipment</th>
+                                     
+                   
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                <tbody> 
+                                        @if (Model.SCEquipDtl != null) {
+                                             @foreach (var item in Model.SCEquipDtl.ToList())
+                                            {
+                                                <tr>
+                                                              
+                                                    <td>@item.ScEquipDesc</td>
+                                                    <td>@item.ScEquipMake</td>
+                                                    <td>@item.ScEquipModel</td>
+                                                    <td>@item.ScEquipNo</td>
+                                                                                            
+                                                    <td>
+                                               <a href="#" class="EquipEdit" onclick="Editequipment();" data-equid="@item.SCEquipId" data-temid="@item.ScTmpId" data-screg="@item.ScRegnNo" data-equipdes="@item.ScEquipDesc"
+                                                 data-equipmake="@item.ScEquipMake" data-equipmodal="@item.ScEquipModel" data-equipno="@item.ScEquipNo" data-srno="@item.SrNo">Select</a>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                            </table>
+                        </div>
+                        </div>
+                <div id="associ" class="tab-panel">                    
+                    <div class="row"style="margin-top:-25px;">                 
+                            <div class="col-md-8 col-sm-8">
+                           <span>  
+                              Associate Company Name 
+                             <input type="text" id="assoname" class="form-control form-text" maxlength="50" disabled>
+                              <input type="text" id="txtassSrno"  class="form-control form-text" hidden >
+                               <input type="text" id="txtcmpid"  class="form-control form-text" hidden >
+                                </span>
+                                  </div>
+                         <div class="col-md-1 col-sm-1"></div>
+                        <div class="col-md-3 col-sm-3"style="padding-top:25px">
+
+                        <button type="button" class="btn btn-success" id="assoadd" disabled onclick="Assocompy();"><i class="fa fa-plus"></i>Add</button>          
+                        <button type="button" class="btn btn-primary"id="AssoUpdate" disabled></i>Update</button>                
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                                                                                        
+                         <div class="container-fluid" style="margin-top:5px;padding:5px;">
+                                
+                            <table id="table3" class="table-bordered table-responsive-md" style="width:100%">
+                                <thead>
+                                    <tr>
+                                       
+                                        <th>Name of Company </th>
+                                         <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.SCAssComp != null)
+                                    {
+                                        @foreach (var item in Model.SCAssComp.ToList())
+                                        {
+                                            <tr>
+                                                <td>@item.AssCompName</td>
+                                                <td>
+                                                 <a href="#" class="AssoEdit"  data-assid="@item.SCAssCmpId" data-tmpid="@item.ScTmpId" data-regnid="@item.ScRegnNo"
+                                                   data-srno="@item.SrNo" data-assocompy="@item.AssCompName">Select</a>
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                </div>
+
+               <div id="exp" class="tab-panel">                
+                    <div class="row"style="margin-top:-25px;">
+                       
+                             <div class="col-md-4 col-sm-4">
+                                <span>           
+                              Project Location
+                             <input type="text" id="site" class="form-control form-text" maxlength="25" disabled>
+                             <input type="text" class="form-control form-text" hidden id="txtexpsrno" />
+                             <input type="text" class="form-control form-text" hidden id="txtwoid" />
+                                </span>
+                                  </div>
+
+                      <div class="col-md-4 col-sm-4">
+                           <span>          
+                              Project Name
+                             <input type="text"  id="projname" class="form-control form-text" maxlength="100" disabled>
+                                </span>
+                                  </div>
+
+                                  
+                      <div class="col-md-1 col-sm-1">
+                           <span>          
+                             Wo Value
+                             <input type="number" id="wovalue" name='value' class="form-control form-text"  maxlength="15" disabled>
+                                </span>
+                                  </div>
+
+                                  
+                         <div class="col-md-3 col-sm-3" style="padding-top:25px; text-align:start">
+                                            
+                        <button type="button" class="btn btn-success" id="expadd" disabled onclick="Experience();"><i class="fa fa-plus"></i>Add</button>          
+                        <button type="button" class="btn btn-primary" disabled id="Experienceupdate"></i>Update</button>
+                         </div>
+                         </div>                      
+                   <div class="row" style="margin-top:5px">
+                            <div class="col-md-4 col-sm-4">
+                                <span>
+                                    Project Client
+                          <input type="text" id="client" class="form-control form-text" maxlength="100" disabled></span>
+                            </div> 
+
+                              <div class="col-md-4 col-sm-4">
+                                <span>
+                                   State
+                          <input type="text" id="state" class="form-control form-text" maxlength="25" disabled></span>
+                            </div> 
+                       </div>
+
+                       <div class="row" style="margin-top:5px">
+                           <div class="col-md-8 col-sm-8">
+                               <span>
+                                    WO Description
+                          <textarea maxlength="500" rows="2" cols="30" class="form-control form-text" id="wodesc" style="resize:none" form="WOdescription" disabled></textarea>                  
+                               </span>
+                           </div>
+                       </div>
+                  <div class="clearfix"> </div>
+                                
+                    <div class="container-fluid" style="margin-top:5px ; padding: 5px">
+                    
+                       <table id="table4" class="table-bordered tabletable-responsive-md">
+                           <thead>
+                              
+                               <tr>
+                               <th>Project Site</th>
+                               <th>Project Name</th>
+                               <th>Client Name</th>
+                               <th> State</th>
+                               <th>WO Description</th>
+                               <th>WO Value</th>
+                                <th>Action</th>
+                               </tr>
+                           </thead>
+
+                           <tbody>
+                                    @if (Model.SCProfileWODtl != null)
+                                    {
+                                        @foreach (var item in Model.SCProfileWODtl.ToList())
+                                        {
+                                            <tr>                           
+                                                <td>@item.ProjSite</td>
+                                                <td>@item.ProjName</td>
+                                                <td>@item.ProjClient</td>
+                                                <td>@item.States</td>
+                                                <td>@item.WODesc</td>
+                                                <td>@item.WOValue</td>
+                                                <td>
+                                            <a href="#" class="ExpexEdit" data-projsite="@item.ProjSite" data-woid="@item.SCProfWOId"
+                                               data-pname="@item.ProjName" data-projclient="@item.ProjClient" data-state="@item.States"
+                                               data-wovaluve="@item.WOValue" data-wodesc="@item.WODesc" data-srno="@item.SrNo">Select</a>                                         
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+
+                       </table>
+                   </div>
+
+
+               </div>
+
+                <div id="attach" class="tab-panel">
+
+                        <div class="container-fluid" style="padding: 5px;">
+                            <table id="tblAddAtth" class="table-bordered tabletable-responsive-md">     
+                                <thead>
+                                    <tr>
+                                        <th style="width:90%">File Name</th>                                  
+                                        <th>Action</th>                                   
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @if (Model.AttachFile != null)
+                                    {
+                                        @foreach (var pdfFile in Model.AttachFile.ToList())
+                                        {
+                                            <tr>                                        
+                                                <td>@pdfFile.AttachDocName</td>
+                                                <td>
+                                                    <a href="@Url.Action("View", "SC", new { SRNO = pdfFile.SrNo, Attachid = pdfFile.AttId })" target="_blank">View</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                      </div>
+
+
+
+            </div>
+        </div>
+    
+           <!-- Modal content -->
+         <div id="btnSClistOpen" class="modal">          
+            <div class="modal-content"> 
+                <h3 style="text-align:center">
+                    
+                    List of Pending Sub Contractors for Verification 
+               
+                </h3>
+                    <span  class="close" id="btnSClistClose">&times;</span>
+                <div class="row">
+                    <div class="col-md-10 col-sm-10">
+                        <span>
+                            Search Name
+                            <input type="text" id="txtpendingname" class="form-control form-text" maxlength="50"/>
+                             <input type="text" id="tmpscid" class="form-control form-text" hidden/>
+                              <input type="text" id="scstatus" class="form-control form-text" hidden/>
+                        </span>
+                    </div>
+                    <div class="col-md-2 col-sm-2" style="padding-top:27px">
+                    <span>
+                         <button type="button" class="btn btn-outline-success" id="btnpending"><i class="fa fa-add"></i>Search</button>
+                    </span>
+                    </div>
+                </div>
+                <hr />
+                <div class="container-fluid" style="margin-top:5px;">
+                    <div id="renderpartialpending" class="col-md-12"></div>             
+                 
+                 </div> 
+            
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
+
+
+<script>
+ $(document).ready(function () {
+        $('#table1').DataTable();
+        $('#table2').DataTable();
+        $('#table3').DataTable();
+        $('#table4').DataTable();
+        $('#table5').DataTable();    
+        $('#tblAddAtth').DataTable();
+ });  
+
+  $(".AddressEdit").click(function () {
+        var srno = $(this).data("srno");
+        var addid = $(this).data("addid");
+        var add1 = $(this).data("add1");
+        var add2 = $(this).data("cyt");
+        var add3 = $(this).data("adgrd3");
+        var city = $(this).data("city");
+        var pincode = $(this).data("ppincode");
+        var phone = $(this).data("phoneno");
+        var fax = $(this).data("faxno");
+        var cntper = $(this).data("cntperson");
+        var desg = $(this).data("desiganation");
+        var mobile = $(this).data("mobileeno");
+        var email = $(this).data("emailid");
+
+        $("#txtsrno").val(srno);
+        $("#Address1").val(add1);
+        $('#txtaddid').val(addid);
+        $("#Address2").val(add2);
+        $("#Address3").val(add3);
+        $("#City").val(city);
+        $("#Pincode").val(pincode);
+        $("#Phone").val(phone);
+        $("#fax").val(fax);
+        $("#contper").val(cntper);
+        $("#designat").val(desg);
+        $("#mobile").val(mobile);
+        $("#emails").val(email);
+
+       document.getElementById("AddressADD").disabled = true;
+        document.getElementById("Addressupdate").disabled = true;
+    });
+
+    $(".EquipEdit").click(function () {
+
+        var Eqipid = $(this).data("equid");
+        var srno = $(this).data("srno");
+        var des = $(this).data("equipdes");
+        var make = $(this).data("equipmake");
+        var modal = $(this).data("equipmodal");
+        var quip = $(this).data("equipno");
+
+        $("#textequiid").val(Eqipid);
+        $("#textequisrno").val(srno);
+        $("#equipdesc").val(des);
+        $("#make").val(make);
+        $("#model").val(modal);
+        $("#number").val(quip);
+
+
+        document.getElementById("equiadd").disabled = true;
+        document.getElementById("equipUpdate").disabled = true;
+    });
+
+     $(".AssoEdit").click(function () {
+
+        var compy = $(this).data("assocompy");
+        var Assid = $(this).data("assid");
+        var srno = $(this).data("srno");
+
+        $("#assoname").val(compy);
+        $("#txtassSrno").val(srno);
+        $("#txtcmpid").val(Assid);
+   
+
+        //for Enable and Disable
+        document.getElementById("assoadd").disabled = true;
+        document.getElementById("AssoUpdate").disabled = true;
+
+    });
+
+     $(".ExpexEdit").click(function () {
+
+        var exptx = $(this).data("srno");
+        var prowoid = $(this).data("woid");
+        var site = $(this).data("projsite");
+        var pname = $(this).data("pname");
+        var client = $(this).data("projclient");
+        var state = $(this).data("state");
+        var value = $(this).data("wovaluve");
+        var desc = $(this).data("wodesc");
+
+        $("#txtexpsrno").val(exptx);
+        $("#txtwoid").val(prowoid);
+        $("#site").val(site);
+        $("#projname").val(pname);
+        $("#client").val(client);
+        $("#state").val(state);
+        $("#wovalue").val(value);
+        $("#wodesc").val(desc);
+
+        //for Enable and Disable
+        document.getElementById("expadd").disabled = true;
+        document.getElementById("Experienceupdate").disabled = true;
+    });
+
+</script>
+
+
+<script>
+    $("#Verification").click(function () {
+       // var scstatus = parseInt($("#scstatus").val()) + 1;
+        var scstatus = $("#scstatus").val();
+        var tempid = $("#tmpscid").val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/SC/Verification',
+            data: { Tempid: tempid, SCStatus: scstatus },
+            cache: false,
+            success: function (data) {
+
+             $("#scstatus").val('');
+             $("#tmpscid").val('');  
+             location.reload();
+            },
+        });
+    });
+</script>
+
+

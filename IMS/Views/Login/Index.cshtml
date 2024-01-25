@@ -1,0 +1,63 @@
+﻿@model IMS_Model.LoginModel.Login
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="~/css/toastr.min.css" rel="stylesheet" />
+    <script src="~/js/toastr.js"></script>
+    <script src="~/js/code.jquery.com_jquery-3.7.0.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <link href="~/css/loginstyle.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="background-image"></div>
+
+        <div class="login-content">
+
+            <div class="login-card">
+                <div class="icon">
+                    <img src="~/bicpl_logo.ico" class="logo" />
+                </div>
+                <form method="post">
+                    <div class="row w-100">
+                        <div class="input-group">
+                            <label for="UserName">User ID</label>
+                            <input type="text" class="form-control form-text" id="tbUserId" asp-for="UserName" name="UserName" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="password">Password</label>
+                            <input type="password" asp-for="Password" id="password" name="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="submit">Login To IMS</button>
+                        </div>
+
+                        <div class="forgot-password" style="text-align:end;">
+                            <a asp-action="ForgotPassword" asp-controller="Login">Forgot Password?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @section scripts
+        {
+        @{
+            await Html.RenderPartialAsync("_Notification");
+        }
+    }
+</body>
+
+</html>
+

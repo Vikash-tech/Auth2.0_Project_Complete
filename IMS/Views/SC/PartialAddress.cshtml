@@ -1,0 +1,154 @@
+﻿
+@model IEnumerable<IMS_Model.SC.SCCreation.SCMst>
+
+<table id="table1" class="table-bordered tabletable-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SRNO)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCAddressId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SCAdd1)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCAdd2)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.SCAdd3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pincode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNo)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.FaxNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CntPerson)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.Desiganation)
+            </th>
+            <th style="display:none">
+                @Html.DisplayNameFor(model => model.MobileNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailId)
+            </th>
+            <th style="width:10%;">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+  
+        @foreach (var item in Model)
+         {
+           
+            <tr>
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.SRNO)
+                </td>
+                      <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.SCAddressId)
+                    </td>
+                    <td >
+                        @Html.DisplayFor(modelItem => item.SCAdd1)
+                    </td>
+                    <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.SCAdd2)
+                    </td>
+                    <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.SCAdd3)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.Country)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pincode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNo)
+                    </td>
+                    <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.FaxNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CntPerson)
+                    </td>
+                    <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.Desiganation)
+                    </td>
+                    <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.MobileNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmailId)
+                    </td>
+                    <td>
+                        <a href="#" class="Edit" onclick="EditAdd();" data-sr="@item.SRNO" data-add1="@item.SCAdd1" data-cyt="@item.SCAdd2" data-adgrd3="@item.SCAdd3"
+                           data-city="@item.City" data-country="@item.Country" data-pincode="@item.Pincode" data-phoneno="@item.PhoneNo"
+                           data-faxno="@item.FaxNo" data-cntperson="@item.CntPerson"
+                           data-desiganation="@item.Desiganation" data-mobileeno="@item.MobileNo" data-emailid="@item.EmailId">Select</a>
+
+                    </td>
+                </tr>
+            }
+
+    </tbody>
+</table>
+<script>
+    //for Query table
+    $(document).ready(function () {
+        $('#table1').DataTable();
+    });
+
+    //Send data into Textbox
+    $(".Edit").click(function () {
+        var srno = $(this).data("sr");
+        var add1 = $(this).data("add1");
+        var add2 = $(this).data("cyt");
+        var add3 = $(this).data("adgrd3");
+        var city = $(this).data("city");
+        var pincode = $(this).data("pincode");
+        var phone = $(this).data("phoneno");
+        var fax = $(this).data("faxno");
+        var cntper = $(this).data("cntperson");
+        var desg = $(this).data("desiganation");
+        var mobile = $(this).data("mobileeno");
+        var email = $(this).data("emailid");
+
+        $("#txtsrno").val(srno);        
+        $("#Address1").val(add1);
+        $("#Address2").val(add2);
+        $("#Address3").val(add3);
+        $("#City").val(city);
+        $("#Pincode").val(pincode);
+        $("#Phone").val(phone);
+        $("#fax").val(fax);
+        $("#contper").val(cntper);
+        $("#designat").val(desg);
+        $("#mobile").val(mobile);
+        $("#emails").val(email);
+    });
+
+    //for Enable and Disable
+    function EditAdd() {
+        document.getElementById("add").disabled = true;
+        document.getElementById("Addressupdate").disabled = false;
+    };
+</script>

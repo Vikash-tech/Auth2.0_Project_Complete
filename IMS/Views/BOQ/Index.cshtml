@@ -1,0 +1,750 @@
+﻿
+ @using IMS_Model.SC.BOQ
+ @model IEnumerable<IMS_Model.SC.BOQ.BOQGrp>
+
+<style>
+
+    td.details-control {
+        background: url('http://www.datatables.net/examples/resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('http://www.datatables.net/examples/resources/details_close.png') no-repeat center center;
+    }
+
+    .boqmodal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        height: 60%;
+        overflow-y: scroll;
+        overflow-x: scroll;
+    }
+
+    .boqgrpmodal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 65%;
+        height: 60%;
+        overflow-y: scroll;
+        overflow-x: scroll;
+    }
+</style>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <div class="containers-style">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5>List of Avilable BOQ Groups</h5>
+                    </div>
+                    <div class="col-md-9 text-right">
+                        <a type="button" class="btn btn-secondary custombtn" asp-action="IMSSetting" asp-controller="Login" title="IMS Setting"><i class="fa fa-gear"></i></a>
+                        <button type="button" onclick="AddGroup();" class="btn btn-success" style="width:88px" title="CreateGroup"><i class="fa fa-plus"></i></button>
+                        <button type="button" onclick="AddSubGroup();" class="btn btn-outline-success" style="width:88px" title="CreateSubGroup"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="location.reload();" title="Refresh"> <i class="fa fa-refresh"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <table id="BoqTable" class="JqueryTable table-bordered tabletable-responsive-md" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th style="width:5%" id="srno">GroupID</th>
+                            <th>Group Name</th>
+                            <th>Group Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderBy(m => m.BOQGrpId))
+                        {
+                            <tr>
+
+                                <td style="width:5%" class="details-control">@item.BOQGrpId</td>
+                                <td>@item.GrpDisp</td>
+                                <td>@item.GrpDesc</td>
+                                <td>
+                                    <a href="#" class="GrpEdit" title="Edit Group" data-dispdata="@item.GrpDisp" data-desdata="@item.GrpDesc" data-grpid="@item.BOQGrpId"><i class='fa fa-edit'></i></a>
+                                    &nbsp; &nbsp;&nbsp;
+                                    <a href="#" class="DeleteGrp" title="Delete Group" data-dispdata="@item.GrpDisp" data-desdata="@item.GrpDesc" data-grpid="@item.BOQGrpId"><i class="fa fa-trash" style="color:red"></i></a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal content 1-->
+    <div id="Grouppop" class="modal">
+        <div class="boqgrpmodal-content">
+            <span class="close btnclose">&times;</span>
+            <h3 style="text-align:center" id="createdis">
+                Group Creation
+            </h3>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="container-fluid">
+                <div class="col-md-6 col-sm-6">
+                    <span>
+                        Group Name
+                        <input type="text" id="grpdisp" class="form-control form-text" maxlength="50" required />
+                        <input type="text" id="txtgrpid" class="form-control form-text" hidden />
+
+                    </span>
+                </div>
+
+                <div class="col-md-6 col-sm-6" style="margin-top:5px">
+                    <span>
+                        Group Description
+                        <input type="text" id="grpdesc" class="form-control form-text" maxlength="190" required />
+
+                    </span>
+                </div>
+                <br />
+
+                <div class="row col-md-12 col-sm-12">
+                    <div class="col-md-2 col-sm-2">
+                        <button type="button" id="AddnewGrp" visible class="btn btn-outline-success form-control" title="Save">Save</button>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <button type="button" id="UpdateGrp" visible class="btn btn-outline-primary form-control" title="Save">Update</button>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <button type="button" id="DeleteGrp" visible class="btn btn-outline-danger form-control" title="Save">Delete</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal content 2-->
+    <div id="SubGrouppop" class="modal">
+        <div class="boqmodal-content">
+            <span class="close btnclose">&times;</span>
+            <h3 style="text-align:center" id="createdis">
+                Sub-Group Creation
+            </h3>
+
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row col-md-12 col-sm-12" style="margin-top:10px;">
+                <div class="col-md-6 col-sm-6">
+                    <span>
+                        Group Name
+                        <select id="grpname" class="form-control form-text custom-select">
+                            <option>--Select--</option>
+                            @foreach (var grpname in ViewBag.Grplist)
+                            {
+                                <option value="@grpname.BOQGrpId">@grpname.GrpDisp</option>
+                            }
+                        </select>
+                        <input type="text" id="subgrpid" class="form-control form-text" maxlength="50" hidden />
+                    </span>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                    <span>
+                        Sub Group Name
+                        <input type="text" id="grpsubname" class="form-control form-text" maxlength="50" required />
+
+                    </span>
+                </div>
+            </div>
+            <br />
+            <div class="row col-md-12 col-sm-12">
+                <div class="col-md-6 col-sm-6">
+                    <span>
+                        Sub Group Description
+                        <input type="text" id="grpsubdesc" class="form-control form-text" maxlength="190" required />
+                    </span>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <span>
+                        Tally Ledger
+                        <input type="text" id="grptally" class="form-control form-text" maxlength="240" required />
+                    </span>
+                </div>
+            </div>
+            <br />
+            <div class="row col-md-12 col-sm-12">
+                <div class="col-md-2 col-sm-2">
+                    <button type="button" id="AddSubGrp" disabled class="btn btn-outline-success form-control" title="Save">Save</button>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <button type="button" id="UpdateSubGrp" disabled class="btn btn-outline-primary form-control" title="Save">Update</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    
+    function AddGroup() {
+
+        document.getElementById("Grouppop").style.display = "block";
+        document.getElementById("UpdateGrp").style.visibility = "hidden";
+        document.getElementById("DeleteGrp").style.visibility = "hidden";
+    }
+
+    $(".btnclose").click(function () {
+        document.getElementById("Grouppop").style.display = "none";
+        document.getElementById("SubGrouppop").style.display = "none";
+        location.reload();
+    });
+
+</script>
+
+@*Script For Group *@
+<script>
+
+    $(".GrpEdit").click(function () {
+        var disp = $(this).data("dispdata");
+        var desc = $(this).data("desdata");
+        var Grpid = $(this).data("grpid");
+        $("#grpdisp").val(disp);
+        $("#grpdesc").val(desc);
+        $("#txtgrpid").val(Grpid);
+
+        document.getElementById("Grouppop").style.display = "block";
+        document.getElementById("AddnewGrp").style.visibility = "hidden";
+        document.getElementById("DeleteGrp").style.visibility = "hidden";
+
+    });
+
+
+    $("#AddnewGrp").click(function () {
+
+        var grpdisp = $("#grpdisp").val();
+        var grpdesc = $("#grpdesc").val();
+
+      if(ValidationBOQgrp())
+      { 
+        Swal.fire({
+            title: 'Are you sure? Do you want to Save?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Save!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                           
+                $.ajax({
+                    type: 'POST',
+                    url: '/BOQ/GroupCreate',
+                    data: { GrpDisc: grpdisp, GrpDec: grpdesc },
+                    cache: false,
+                    success: function (data) {
+                        Swal.fire({
+                            position: 'center',
+                            text: data,
+                            icon: 'success',
+                            showConfirmButton: true,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $("#grpdisp").val('');
+                                $("#grpdesc").val('');
+                                location.reload();                           
+                            }
+                        });
+                        document.getElementById("Grouppop").style.display = "none";
+                    },
+                    error: function (xhr, status, error) {
+
+                        alert(status);
+                    }
+                });
+                
+            } else {
+
+                Swal.fire('BOQ Group has not been saved', '', 'info');
+                document.getElementById("Grouppop").style.display = "none";
+            }
+        });
+
+      };
+
+    });
+
+
+     $("#UpdateGrp").click(function () {
+
+        var Grpid = $("#txtgrpid").val();
+        var grpdisp = $("#grpdisp").val();
+        var grpdesc = $("#grpdesc").val();
+        if(ValidationBOQgrp()){
+            Swal.fire({
+                title: 'Are you sure? Do you want to Update?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Update'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                       $.ajax({
+                        type: 'POST',
+                        url: '/BOQ/GroupEdit',
+                        data: { GrpID: Grpid, GrpDisc: grpdisp, GrpDec: grpdesc },
+                        cache: false,
+                        success: function (data) {
+                            Swal.fire({
+                                position: 'center',
+                                text: data, 
+                                icon: 'success',
+                                showConfirmButton: true,
+                            }).then((result) => {
+                                if (result.isConfirmed) {   
+                                    $("#grpdisp").val('');
+                                    $("#grpdesc").val('');
+                                    $("#txtgrpid").val('');
+                                    location.reload();
+                                }
+                            });                   
+                            document.getElementById("Grouppop").style.display = "none";
+                        },
+                        error: function (xhr, status, error) {
+                      
+                            alert(status);
+                        }
+                    });
+                } else {
+                
+                    Swal.fire('BOQ Group has not been saved', '', 'info'); 
+                    document.getElementById("Grouppop").style.display = "none";
+                }
+            });
+        };
+    });
+
+
+    $(".DeleteGrp").click(function () {
+
+        var grpdisp = $(this).data("dispdata");
+        var grpdesc = $(this).data("desdata");
+        var Grpid = $(this).data("grpid");
+
+        Swal.fire({
+            title: 'Are you sure?',              
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                $.ajax({
+                type: 'POST',
+                url: '/BOQ/GroupDelete',
+                data: { GrpID: Grpid, GrpDisc: grpdisp, GrpDec: grpdesc },
+                cache: false,
+                success: function (data) {
+
+                        Swal.fire({
+                        position: 'center',
+                        icon: 'success',                  
+                        text: data,
+                        icon: 'success',
+                        showConfirmButton: true,
+                   
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                        location.reload();
+                        };
+                    });                                           
+                },
+                   
+            });
+              
+            }
+        })     
+    });
+</script>
+
+@*Script For Sub-Group *@
+<script>
+
+    function AddSubGroup() {
+        
+      document.getElementById("SubGrouppop").style.display = "block";
+      document.getElementById("AddSubGrp").disabled = false;
+
+    };
+
+    $("#AddSubGrp").click(function(){
+ 
+        var name = $("#grpname :selected").val(); 
+        var subdisname = $("#grpsubname").val();
+        var subname = $("#grpsubdesc").val(); 
+        var grptally = $("#grptally").val();
+
+      if(ValidationBOQsubgrp ())
+      {
+
+        Swal.fire({
+            title: 'Are you sure? Do you want to Save?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Save!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/BOQ/InsertSubGrp',
+                    data: { GrpName: name, GrpSubDis: subname, GrpSubName: subdisname, GrpTally: grptally },
+                    cache: false,
+                    success: function (data) {
+                        Swal.fire({
+                            position: 'center',
+                            text: data,
+                            icon: 'success',
+                            showConfirmButton: true,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $("#grpname").val('');
+                                $("#grpsubname").val('');
+                                $("#grpsubdesc").val('');
+                                $("#grptally").val('');
+                                location.reload();                           
+                            }
+                        });
+                       document.getElementById("SubGrouppop").style.display = "none";
+                    },
+                    error: function (xhr, status, error) {
+
+                        alert(status);
+                    }
+                });
+            } else {
+
+                Swal.fire('BOQ Sub-Group has not been saved', '', 'info');
+                document.getElementById("SubGrouppop").style.display = "none";
+            }
+        });
+      };
+
+    });
+
+    $("#UpdateSubGrp").click(function () {
+
+        var name = $("#grpname :selected").val();
+        var subdisname = $("#grpsubname").val();
+        var subname = $("#grpsubdesc").val();
+        var grptally = $("#grptally").val(); 
+        var subgrpid = $("#subgrpid").val();
+
+        if (ValidationBOQsubgrp()) {
+
+            Swal.fire({
+                title: 'Are you sure? Do you want to Update?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Update'
+            }).then((result) => {
+
+
+                if (result.isConfirmed) {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/BOQ/UpdateSubGrp',
+                        data: { SubGrpId:subgrpid, GrpName: name, GrpSubDis: subname, GrpSubName: subdisname, GrpTally: grptally },
+                    cache: false,
+                    success: function (data) {
+                        Swal.fire({
+                            position: 'center',
+                            text: data,
+                            icon: 'success',
+                            showConfirmButton: true,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                        $("#SubGrouppop").hide();
+                        },
+                        error: function (xhr, status, error) {
+                            alert(status);
+                        }
+                    });
+                } else {
+
+                Swal.fire('BOQ Sub-Group has not been Updated', '', 'info');
+                $("#SubGrouppop").hide();
+                }
+            });
+        };       
+       
+    });
+ </script>
+
+<script>
+
+    $(document).ready(function () {
+        let table = new DataTable('#BoqTable');
+
+        $('#BoqTable').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            var rowData = row.data();
+
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                var id = rowData[0]; 
+
+                $.ajax({
+                    url: '/BOQ/ChildDatabyID',
+                    type: 'POST',
+                    data: { Id: id },
+                    success: function (response) {
+                        
+                        var detailsRow = formatDetails(response);
+                        row.child(detailsRow).show();
+                        tr.addClass('shown');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request error:", error);
+                    }
+                });
+            }
+        });
+    });
+    
+    function formatDetails(data) {
+        var html = '<table class="table-bordered tabletable-responsive-md ChildGrid" style="width:100%"><thead><tr><th style="display:none;">Sub Grp ID</th><th>Sub Grp Disp</th><th>Sub Grp Desc</th><th>Tally Ledger</th><th>Action</th></tr></thead><tbody>';
+
+        for (var i = 0; i < data.length; i++) {
+            html += '<tr>';
+            html += '<td style="display:none;">' + data[i].boqSubGrpId + '</td>';
+            html += '<td>' + data[i].subGrpDisp + '</td>';
+            html += '<td>' + data[i].subGrpDesc + '</td>';
+            html += '<td>' + data[i].tallyLedger + '</td>';
+
+            html += '<td><a href="#" class="SubGrpEdit" title="Edit Sub Group" data-subgrpid="' + data[i].boqSubGrpId + '"><i class="fa fa-edit"></i></a>  &nbsp; &nbsp;&nbsp;  <a href="#" class="SubGrpDelete" title="Delete Sub Group" data-subgrpid="' + data[i].boqSubGrpId + '"><i class="fa fa-trash" style="color:red"></i></a></td>';
+           // html += '<td><a href="#" class="SubGrpEdit" title="Edit Sub Group"><i class="fa fa-edit"></i></a>  &nbsp; &nbsp;&nbsp;  <a href="#" class="SubGrpDelete" title="Delete Sub Group"><i class="fa fa-trash" style="color:red"></i></a></td>';
+            html += '</tr>';
+           
+        }
+        html += '</tbody></table>';
+        return html;
+    }
+
+   
+    $('#BoqTable').on('click', '.SubGrpEdit', function (event) {
+        event.preventDefault();
+
+        var subGrpId = $(this).data('subgrpid');
+        $.ajax({
+        type: 'POST',
+        url: '/BOQ/GetSubGroupData',
+        data: { SubGrpId: subGrpId },            
+            success: function (data){                
+                document.getElementById("SubGrouppop").style.display = "block";
+                $('#grpname').val(data[0].grpId);
+                $('#grpsubname').val(data[0].subGrpDisp);
+                $('#grpsubdesc').val(data[0].subGrpDesc);
+                $('#grptally').val(data[0].tallyLedger);
+                $('#subgrpid').val(data[0].boqSubGrpId);
+            },
+
+        });
+        document.getElementById("UpdateSubGrp").disabled = false;
+    });
+
+
+   $('#BoqTable').on('click', '.SubGrpDelete', function (event) {
+            event.preventDefault();
+
+       var subtextid = $(this).data('subgrpid');
+
+        Swal.fire({
+            title: 'Do you want to Delete ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete it!'
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/BOQ/DeleteSubGrp',
+                    data: { SubGrpId: subtextid },
+                    cache: false,
+                    success: function (data) {
+                        Swal.fire({
+                            position: 'center',
+                            text: data,
+                            icon: 'success',
+                            showConfirmButton: true,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+
+                    },
+                    error: function (xhr, status, error) {
+                        alert(status);
+                    }
+                });
+            } else {
+
+                Swal.fire('BOQ Item has not been Deleted', '', 'info');
+
+            }
+        });
+          
+   });
+
+</script>
+
+<script>
+
+    function ValidationBOQgrp(){
+
+        var site = $("#Sitelist").val();     
+        var grpdisp = $("#grpdisp").val();
+        var grpdesc = $("#grpdesc").val();
+
+
+        if(site == null || site == '')
+        {
+        alert("Select Site ", this);
+        return false;
+        }
+
+        if(grpdisp == null || grpdisp == '')
+        {
+            alert("Group Name Can not be left blank", this);
+            return false;
+        }
+
+        if(grpdesc == null || grpdesc == '')
+        {
+            alert("Group Description Can not be left blank", this);
+            return false;
+        }
+
+         if(grpdesc == grpdisp)
+        {
+            alert("Group Name And Group Description Can not be Same", this);
+            return false;
+        } 
+        return true;        
+    }
+
+
+    function ValidationBOQsubgrp(){
+
+        var site = $("#Sitelist").val();     
+        var name = $("#grpname").val();
+        var subname = $("#grpsubname").val();
+        var subdisname = $("#grpsubdesc").val();
+        var grptally = $("#grptally").val();
+
+
+        if(site == null || site == '')
+        {
+        alert("Select Site ", this);
+        return false;
+        }
+
+        
+        if(name == "--Select--")
+        {
+        alert("Select Group Name ", this);
+        return false;
+        }
+
+
+        if(subname == null || subname == '')
+        {
+            alert("Sub-Group Name Can not be left blank", this);
+            return false;
+        }
+
+        if(subdisname == null || subdisname == '')
+        {
+            alert("Sub-Group Description Can not be left blank", this);
+            return false;
+        }
+
+        
+        if(grptally == null || grptally == '')
+        {
+            alert("Group Tally Can not be left blank", this);
+            return false;
+        }
+
+        if(subname == subdisname)
+        {
+            alert("Sub-Group Name And Sub-Group Description Can not be Same", this);
+            return false;
+        } 
+        return true;    
+         
+    }
+   
+</script>
+
+<script>
+    $(function () {
+        // Attach autocomplete functionality to the textbox
+        $("#grptally").autocomplete({
+       
+            source: function (request, response) {
+                // Fetch the list of suggestions from ViewBag
+                var suggestions = @Html.Raw(Json.Serialize(ViewBag.GetTally));    
+                
+                // Filter the suggestions based on the user's input
+                var filteredSuggestions = $.grep(suggestions, function (item) {
+                      
+                    return item.toLowerCase().indexOf(request.term.toLowerCase()) >= 0;
+                });
+
+                // Provide the filtered suggestions to the autocomplete
+                response(filteredSuggestions);
+                
+            }
+        });
+    });
+</script>
+
+<script src="~/js/code.jquery.com_ui_1.12.1_jquery-ui.js"></script>
+<link href="~/css/code.jquery.com_ui_1.12.1_themes_base_jquery-ui.css" rel="stylesheet" />

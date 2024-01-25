@@ -1,0 +1,123 @@
+﻿@model IMS_Model.SettingModel.IMSRoleMaster
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+
+            if (successMessage !== "") {
+                alert(successMessage);
+            } else if (errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+    </script>
+    <style>
+        .firstrow {
+            margin-top: -15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+        <form method="post">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Role Master Creation </h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+                            @* for buttons *@
+                            <a type="button" class="btn btn-outline-dark custombtn" asp-controller="RoleMstSetting" asp-action="Index" title="Back"><i class="fa fa-backward"></i></a>
+                            @if (Model != null)
+                            {
+                                @if (Model.Id !=null)
+                                {
+                                    <button type="submit" class="btn btn-outline-primary custombtn" asp-action="Edit" title="Update"><i class="fa fa-random"></i></button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success custombtn" asp-action="RoleCreation" title="Save"><i class="fa fa-save"></i></button>
+                            }
+                            <button type="button" class="btn btn-outline-secondary custombtn" onclick="location.reload();" title="Clear Data">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row firstrow">
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="NormalizedName" class="control-label"></label>
+                                <input asp-for="NormalizedName" class="form-control" />
+                                <span asp-validation-for="NormalizedName" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="LockPeriod" class="control-label"></label>
+                                <input asp-for="LockPeriod" class="form-control" />
+                                <span asp-validation-for="LockPeriod" class="text-danger"></span>
+                            </span>
+                        </div>
+
+
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="LockPeriodAdd" class="control-label"></label>
+                                <input asp-for="LockPeriodAdd" class="form-control" />
+                                <span asp-validation-for="LockPeriodAdd" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="ConcurrencyStamp" class="control-label"></label>
+                                <input asp-for="ConcurrencyStamp" class="form-control" />
+                                <span asp-validation-for="ConcurrencyStamp" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Active Status
+                                <br />
+                                <input asp-for="ActStatus" type="checkbox" />
+                                &nbsp;
+                                Active Status
+                                <span asp-validation-for="ActStatus" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        ButtonsRight();
+    });
+</script>

@@ -1,0 +1,506 @@
+﻿@model IMS_Model.CommonDropDown.ViewModel.CompanyMst_VM
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+            var buttons = '@TempData["buttons"]';
+
+            if (buttons !== "") {
+                document.getElementById("btnUpdateMst").disabled = true;
+                document.getElementById("btnsaveMst").disabled = true;
+                document.getElementById("btnSaveAddrss").disabled = true;
+                document.getElementById("btnAddupt").disabled = true;
+            }
+
+            if (successMessage !== "") {
+                alert(successMessage);
+            } else if (errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+    </script>
+    <style>
+        .firstrow {
+            margin-top: -25px;
+        }
+
+        .secondrow {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+        <form method="post" enctype="multipart/form-data">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Company Master Creation </h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+                            @* for buttons *@
+                            <button type="submit" class="btn btn-outline-dark custombtn" asp-controller="CompanyMst" asp-action="Index" title="Back"><i class="fa fa-backward"></i></button>
+
+                            @if (Model.CompMst != null)
+                            {
+                                @if (Model.CompMst.CompId > 0)
+                                {
+                                    <button type="submit" id="btnUpdateMst" class="btn btn-outline-primary custombtn" asp-action="CompanyMstCreation" title="Update">
+                                        <i class="fa fa-random"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" id="btnsaveMst" class="btn btn-success custombtn" asp-action="CompanyMstCreation" title="Save">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" id="btnsaveMst" class="btn btn-success custombtn" asp-action="CompanyMstCreation" title="Save">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tabset">
+                        <!-- Tab 1 -->
+                        <input type="radio" name="tabset" id="tab1" aria-controls="master" checked>
+                        <label for="tab1">Master Details</label>
+                        <!-- Tab 2 -->
+                        <input type="radio" name="tabset" id="tab2" aria-controls="address">
+                        <label for="tab2">Address Details</label>
+                        <!-- Tab 3 -->
+                        <input type="radio" name="tabset" id="tab3" aria-controls="config">
+                        <label for="tab3">Configuration</label>
+
+                        <div class="tab-panels">
+
+                            <div id="master" class="tab-panel">
+
+                                <div class="row firstrow">
+                                    @if (Model.CompMst != null)
+                                    {
+                                        <input asp-for="CompMst.CompId" type="text" class="form-control form-text" hidden />
+                                    }
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Company Code
+                                            <input asp-for="CompMst.CompCode" type="text" class="form-control form-text" />
+                                            <span asp-validation-for="CompMst.CompCode" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Company Name
+                                            <input asp-for="CompMst.CompName" type="text" class="form-control form-text" />
+                                            <span asp-validation-for="CompMst.CompName" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Company Disp. Name
+                                            <input asp-for="CompMst.CompDisp" type="text" class="form-control form-text" />
+                                            <span asp-validation-for="CompMst.CompDisp" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Company Type
+                                            <select asp-for="CompMst.CtmId" class="form-control form-text custom-select" asp-items="Model.CompTypeMst">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                            <span asp-validation-for="CompMst.CtmId" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Company Pan No.
+                                            <input asp-for="CompMst.CompPan" type="text" class="form-control form-text" />
+                                            <span asp-validation-for="CompMst.CompPan" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row secondrow">
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Company Cin No.
+                                            <input asp-for="CompMst.CompCin" type="text" class="form-control form-text" />
+                                            <span asp-validation-for="CompMst.CompCin" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Company URL
+                                            <input asp-for="CompMst.CompUrl" type="text" class="form-control form-text" />
+                                            <span asp-validation-for="CompMst.CompUrl" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Incor Date
+                                            <input asp-for="CompMst.IncorDt" type="date" class="form-control form-text" />
+                                            <span asp-validation-for="CompMst.IncorDt" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div id="address" class="tab-panel">
+                                <div class="row firstrow">
+                                    <input type="text" hidden id="txtsrno" />
+
+                                    <input asp-for="CompanyAddress.CAddId" id="txtAddrssId" type="text" class="form-control form-text" hidden />
+                                    <input asp-for="CompanyAddress.CompId" id="txtCompId" type="text" class="form-control form-text" hidden />
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Address Type
+                                            <select id="ddlAddresstyp" asp-for="CompanyAddress.AtId" class="form-control form-text custom-select" asp-items="Model.AddressType">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Address 1
+                                            <input id="txtAddress1" asp-for="CompanyAddress.Add1" type="text" class="form-control form-text" />
+
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Address 2
+                                            <input id="txtAddress2" asp-for="CompanyAddress.Add2" type="text" class="form-control form-text" />
+
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Address 3
+                                            <input id="txtAddress3" asp-for="CompanyAddress.Add3" type="text" class="form-control form-text" />
+
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            City
+                                            <input id="txtCity" asp-for="CompanyAddress.City" type="text" class="form-control form-text" />
+
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row secondrow">
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            PinCode
+                                            <input id="txtPinCode" asp-for="CompanyAddress.CaPin" type="text" class="form-control form-text" />
+
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            State
+                                            <select id="ddlState" asp-for="CompanyAddress.StId" class="form-control form-text custom-select" asp-items="Model.StateMst">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Country
+                                            <select id="ddlCountry" asp-for="CompanyAddress.CtId" class="form-control form-text custom-select" asp-items="Model.CountryMst">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Phone No.
+                                            <input id="txtPhone" asp-for="CompanyAddress.Phone" type="text" class="form-control form-text" />
+
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <br />
+                                            <button type="button" id="btnSaveAddrss" class="btn btn-success custombtn" title="Save Address" onclick="AddCompAddress();">
+                                                <i class="fa fa-add"></i>
+                                            </button>
+
+                                            <button type="button" id="btnAddupt" class="btn btn-outline-primary custombtn" title="Update Address" onclick="Addressupdate();">
+                                                <i class="fa fa-random"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row secondrow">
+
+                                    <div class="col-md-12" id="PartialAddressType">
+                                        <partial name="_CompanyAddress" />
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div id="config" class="tab-panel">
+                                <div class="row firstrow">
+                                    @if (Model != null)
+                                    {
+                                        <input asp-for="CompConfg.ConfgId" hidden class="form-control" />
+                                        <input asp-for="CompConfg.CompId" hidden class="form-control" />
+                                    }
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <label class="control-label">Finance Start Date</label>
+                                            <input asp-for="CompConfg.FinStYr" class="form-control" />
+                                            <span asp-validation-for="CompConfg.FinStYr" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Finance End Date</label>
+                                            <input asp-for="CompConfg.FinEdYr" class="form-control" />
+                                            <span asp-validation-for="CompConfg.FinEdYr" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <label class="control-label">Date Format</label>
+                                            <input asp-for="CompConfg.DtFormat" class="form-control" />
+                                            <span asp-validation-for="CompConfg.DtFormat" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <label class="control-label">Time Format</label>
+                                            <input asp-for="CompConfg.TimeFormat" class="form-control" />
+                                            <span asp-validation-for="CompConfg.TimeFormat" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <label class="control-label">Number Format</label>
+                                            <input asp-for="CompConfg.NumFormat" class="form-control" />
+                                            <span asp-validation-for="CompConfg.NumFormat" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <label class="control-label">Currency Format</label>
+                                            <input asp-for="CompConfg.CurrFormat" class="form-control" />
+                                            <span asp-validation-for="CompConfg.CurrFormat" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row secondrow">
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <label class="control-label">Logo (In .Jpeg)</label>
+                                            <input type="file" id="logoFileInput" asp-for="CompConfg.LogoFile" class="form-control" />
+                                            <span asp-validation-for="CompConfg.LogoFile" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    @if (Model.CompConfg != null)
+                                    {
+                                        @if (Model.CompConfg.Logo != null)
+                                        {
+                                            <div class="col-md-2 col-sm-2" style="text-align:center;">
+                                                <span>
+                                                    <img id="logoPreview" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.CompConfg.Logo)" alt="Logo" style="height:90px; width:100px;">
+                                                </span>
+                                            </div>
+                                        }
+                                    }
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <label class="control-label">Letter Head LogoFile(In .Jpeg)</label>
+                                            <input type="file" asp-for="CompConfg.LetterHeadLogoFile" class="form-control" />
+                                            <span asp-validation-for="CompConfg.LetterHeadLogoFile" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    @if (Model.CompConfg != null)
+                                    {
+                                        @if (Model.CompConfg.LetterHeadLogo != null)
+                                        {
+                                            <div class="col-md-6 col-sm-6">
+                                                <span>
+                                                    <img id="logoPreview" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.CompConfg.LetterHeadLogo)" alt="Logo" style="height:150px; width:100%;">
+                                                </span>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+<script>
+
+    $(document).ready(function () {
+
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+
+        document.getElementById("btnAddupt").disabled = true;
+    });
+
+    function validateAddress() {
+        var aid = $("#ddlAddresstyp option:selected").val();
+        var add1 = $("#txtAddress1").val();
+        var add2 = $("#txtAddress2").val();
+        var add3 = $("#txtAddress3").val();
+        var city = $("#txtCity").val();
+        var pinCode = $("#txtPinCode").val();
+        var stid = $("#ddlState option:selected").val();
+        var ctid = $("#ddlCountry option:selected").val();
+        var phone = $("#txtPhone").val();
+
+        if (
+            aid == null || aid == "-1" ||
+            add1 == null || add1 == "" ||
+            add2 == null || add2 == "" ||
+            add3 == null || add3 == "" ||
+            city == null || city == "" ||
+            pinCode == null || pinCode == "" ||
+            stid == null || stid == "-1" ||
+            ctid == null || ctid == "-1" ||
+            phone == null || phone == ""
+        ) {
+
+            alert("Please fill  all the required fields. in Address Details");
+            return false;
+        }
+
+
+        return true;
+    }
+
+    // For Adding  Company Address data in Model
+    var srno = 0;
+    function AddCompAddress() {
+        ++srno;
+        var aid = $("#ddlAddresstyp option:selected").val();
+        var add1 = $("#txtAddress1").val();
+        var add2 = $("#txtAddress2").val();
+        var add3 = $("#txtAddress3").val();
+        var city = $("#txtCity").val();
+        var pinCode = $("#txtPinCode").val();
+        var stid = $("#ddlState option:selected").val();
+        var ctid = $("#ddlCountry option:selected").val();
+        var phone = $("#txtPhone").val();
+        if (validateAddress()) {
+            $.ajax({
+                type: "GET",
+                url: "../CompanyMst/_CompanyAddress",
+                data: {
+                    Aid: aid, Address1: add1, Address2: add2, Address3: add3, City: city, Pincode: pinCode, StateId: stid, CountryId: ctid, Phone: phone, SRNO: srno
+                },
+                success: function (data) {
+                    clearTextBoxes();
+                    $('#PartialAddressType').html(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                },
+            });
+        }
+
+    }
+
+    // For Address Update
+    function Addressupdate() {
+        var srno = $("#txtsrno").val();
+        var addid = $("#txtAddrssId").val();
+        var compid = $("#txtCompId").val();
+        var aid = $("#ddlAddresstyp option:selected").val();
+        var add1 = $("#txtAddress1").val();
+        var add2 = $("#txtAddress2").val();
+        var add3 = $("#txtAddress3").val();
+        var city = $("#txtCity").val();
+        var pinCode = $("#txtPinCode").val();
+        var stid = $("#ddlState option:selected").val();
+        var ctid = $("#ddlCountry option:selected").val();
+        var phone = $("#txtPhone").val();
+
+        $.ajax({
+            type: "GET",
+            url: "../CompanyMst/AddressUpdate",
+            data: {
+                SRNO: srno, AddrId: addid, CompId: compid, Aid: aid, Address1: add1, Address2: add2, Address3: add3, City: city, Pincode: pinCode, StateId: stid, CountryId: ctid, Phone: phone
+            },
+            success: function (data) {
+                clearTextBoxes();
+
+                document.getElementById("btnSaveAddrss").disabled = false;
+                document.getElementById("btnAddupt").disabled = true;
+                $('#PartialAddressType').html(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            },
+        });
+
+    }
+
+    //to clear text box
+    function clearTextBoxes() {
+        $("#txtsrno").val("");
+        $("#txtAddrssId").val("");
+        $("#txtCompId").val("");
+        $("#ddlAddresstyp").val("-1");
+        $("#txtAddress1").val("");
+        $("#txtAddress2").val("");
+        $("#txtAddress3").val("");
+        $("#txtCity").val("");
+        $("#txtPinCode").val("");
+        $("#ddlState").val("-1");
+        $("#ddlCountry").val("-1");
+        $("#txtPhone").val("");
+    }
+
+</script>

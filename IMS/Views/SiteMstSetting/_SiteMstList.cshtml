@@ -1,0 +1,62 @@
+﻿@model IEnumerable<IMS_Model.UserMaster.SiteMaster>
+
+
+<table id="tblSiteMstList" class="table-bordered table-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+
+            <th>
+                Site Code
+            </th>
+            <th>
+                Site Name
+            </th>
+            <th>
+                Site Start Date
+            </th>
+            <th>
+                Site GSTIN
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SiteCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SiteName)
+                </td>
+                <td>
+                    @item.SiteStdt.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SiteGSTN)
+                </td>
+                <td>
+                    @Html.ActionLink("", "SiteCreation", new { SiteId = item.SiteId }, new { @class = "btnUpdate fa fa-edit" })
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.ActionLink("", "Delete", new { id = item.SiteId }, new { @class = "btnUpdate fa fa-trash", onclick = "return confirm('Are you sure you want to delete this item?');" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+
+        new DataTable('#tblSiteMstList', {
+            paging: false,
+            scrollX: true,
+            scrollY: 300
+        });
+
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+    });
+</script>

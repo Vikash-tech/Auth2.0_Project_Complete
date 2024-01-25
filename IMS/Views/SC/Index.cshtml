@@ -1,0 +1,205 @@
+﻿@model IEnumerable<IMS_Model.SC.SCCreation.SCMst>
+<!DOCTYPE html>
+<html>
+<head>
+    @*   <script>
+    $(document).ready(function () {
+    var successMessage = '@TempData["Success"]';
+    var errorMessage = '@TempData["Error"]';
+
+    if (successMessage !== "") {
+    alert(successMessage);
+    } else if (errorMessage !== "") {
+    alert(errorMessage);
+    }
+    });
+    </script> *@
+
+    <link href="~/cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.css" rel="stylesheet" />
+    <script src="~/cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js"></script>
+
+
+    <script>
+
+        var ok = '@TempData["Success"]';
+        var error = '@TempData["Error"]';
+
+        if (ok != null && ok !== "") {
+            toastr.success(ok);
+        }
+        else if (error != null && error !== "") {
+            toastr.error(error);
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="containers-style">
+
+        <div class="card custom-card">
+            <div class="card-header">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5>SC Creation</h5>
+                    </div>
+                    <div class="col-md-9 text-right">
+                        <a href="@Url.Action("SCIndex")" class="btn btn-success custombtn btnAdd" title="Add">
+                            <i class="fa fa-plus"></i>
+                        </a>
+
+                        <button type="button" class="btn btn-outline-secondary custombtn" onclick="location.reload();" title="Clear Data">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+
+                <div class="tabset">
+                    <!-- Tab 1 -->
+                    <input type="radio" name="tabset" id="tab1" aria-controls="basic" checked>
+                    <label for="tab1">SC Register List</label>
+                    <!-- Tab 2 -->
+                    <input type="radio" name="tabset" id="tab2" aria-controls="statutory">
+                    <label for="tab2">SC Pending List</label>
+
+                    <div class="tab-panels">
+                        <div id="basic" class="tab-panel">
+                            <div class="row" style="margin-top:-20px;">
+                                <div class=" col-md-12">
+                                    <table id="tblMstSClist" class="table-bordered table-responsive-md" style="width:100%">
+                                        <thead>
+                                            <tr>
+
+                                                <th>
+                                                    SC Reg NO.
+                                                </th>
+                                                <th>
+                                                    SC Name
+                                                </th>
+                                                <th>
+                                                    SC GST No
+                                                </th>
+                                                <th>
+                                                    SC PAN No
+                                                </th>
+                                                <th>
+                                                    GST Status
+                                                </th>
+                                                <th style="width:10%;">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.ToList())
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ScRegNo)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.SCName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.SCGST)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.SCPAN)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.SCGSTStatusvar)
+                                                    </td>
+
+                                                    <td style="width:10px;">
+                                                        <a href="@Url.Action("SCIndex", "sc", new {Tempscid = item.TmpScId , SCPANAttach =item.SCPANAttach,SCGSTAttach = item.SCGSTAttach, SCPFAttach=item.SCPFAttach,
+                                                           SCESIAttach = item.SCESIAttach ,SCCHQAttac=item.SCCHQAttac,MandateAttach=item.MandateAttach,MSMEAttach=item.MSMEAttach,SCAttch=item.SCAttch})"><i class="fa fa-eye"></i></a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="statutory" class="tab-panel">
+                            <div class="row" style="margin-top:-20px;">
+                                <div id="renderpartialpending" class="col-md-12"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+
+        new DataTable("#tblMstSClist", {
+
+            dom: 'Bfrtip',
+            fixedheader: true,
+            paging: true,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa-solid fa-file-excel"></i>',
+                    titleAttr: 'Excel',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa-solid fa-file-pdf"></i>',
+                    titleAttr: 'PDF',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa-solid fa-print"></i>',
+                    titleAttr: 'Print',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    text: '<i class="fa-solid fa-gears"></i>',
+                    titleAttr: 'Custom Column',
+                },
+            ]
+
+        });
+    });
+
+
+    $("#tab2").click(function () {
+        var itmcd = $("#txtpendingname").val();
+        $.ajax({
+            type: 'POST',
+            url: '../SC/PendingSC',
+            data: { pName: itmcd },
+            cache: false,
+            success: function (data) {
+                $('#renderpartialpending').html(data);
+            },
+        });
+    });
+</script>
+
+

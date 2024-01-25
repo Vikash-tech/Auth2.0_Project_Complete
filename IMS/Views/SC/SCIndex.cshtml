@@ -1,0 +1,1437 @@
+﻿@model IMS_Model.SC.SCCreation.VmSC
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+
+        #done {
+            /* background: #000 url('loader.gif') no-repeat center;*/
+            background: #FFFF url('ezgif.com-gif-maker.webp') no-repeat center;
+            background-size: 10%;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            z-index: 100;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+
+            if (successMessage !== "") {
+                alert(successMessage);
+            } else if (errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div class="containers-style">
+        <form id="Sendata" method="post">
+            <div class="card .custom-card">
+                <div class="card-header">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Sub Contractor Creation Request</h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+
+                            <a type="button" id="btnpedSC" class="btn btn-outline-dark custombtn" asp-controller="SC" asp-action="Index" title="Back"><i class="fa fa-backward"></i></a>
+                            @if (Model.scmst != null)
+                            {
+                                @if (Model.scmst.SCStatus != 0)
+                                {
+                                    @if (Model.scmst.SCStatus == 1)
+                                    {
+                                        <button type="button" onclick="UpdateSC();" class="btnUpdate btn btn-outline-primary custombtn" title="Update"><i class="fa fa-random"></i></button>
+                                        <button type="button" id="Verification" class="btnPMVerify btn btn-success custombtn" title="Verification"><i class="fa fa-check"></i></button>
+                                        <button type="button" id="Reject" class="btnCancel btn btn-danger custombtn" title="Reject"><i class="fa fa-ban"></i></button>
+                                    }
+                                    @if (Model.scmst.SCStatus == 2)
+                                    {
+                                        <button type="button" id="Approval" class="btnApprove btn btn-success custombtn" title="Approval"><i class="fa fa-check"></i></button>
+                                        <button type="button" id="Reject" class="btnCancel btn btn-danger custombtn" title="Reject"><i class="fa fa-ban"></i></button>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <button type="button" class="btnAdd btn btn-success custombtn" id="savebtn" onclick="SaveButn();" title="Save"><i class="fa fa-save"></i></button>
+                            }
+                            <button type="button" class="btn btn-outline-secondary custombtn" id="reload" title="Clear Data"><i class="fa fa-refresh"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row" style="margin-top:-15px;">
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                SC Reg No
+                                <input type="hidden" asp-for="scmst.TmpScId" />
+                                <input type="hidden" asp-for="scmst.SCStatus" />
+                                <input type="hidden" asp-for="scmst.ReqSite" />
+                                <input type="text" asp-for="scmst.ScRegNo" class="form-control form-text" id="SCRegNo" placeholder="SC Reg No" disabled />
+                            </span>
+                        </div>
+
+                        <div class="col-md-8 col-sm-8">
+                            <span>
+                                SC Name<span class="text-danger">*</span>
+                                <input type="text" asp-for="scmst.SCName" class="form-control form-text" id="SCName" style="text-transform:uppercase" placeholder="Sub-Contractor Name" maxlength="50" />
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Company Type<span class="text-danger">*</span>
+                                <select asp-for="scmst.SCCompType" class="form-control form-text custom-select" asp-items="Model.Compty" id="compy">
+                                    <option value="-1">--Select--</option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="tabset" style="margin-top:15px;">
+                        <!-- Tab 1 -->
+                        <input type="radio" name="tabset" id="tab1" aria-controls="basic" checked>
+                        <label for="tab1">Address Details</label>
+                        <!-- Tab 2 -->
+                        <input type="radio" name="tabset" id="tab2" aria-controls="statutory">
+                        <label for="tab2">Statutory Details</label>
+                        <!-- Tab 3 -->
+                        <input type="radio" name="tabset" id="tab3" aria-controls="bank">
+                        <label for="tab3">Bank Details / TurnOver</label>
+                        <!-- Tab 4 -->
+                        <input type="radio" name="tabset" id="tab4" aria-controls="equip">
+                        <label for="tab4">Equipment</label>
+                        <!-- Tab 5 -->
+                        <input type="radio" name="tabset" id="tab5" aria-controls="associ">
+                        <label for="tab5">Associate Company</label>
+                        <!-- Tab 6 -->
+                        <input type="radio" name="tabset" id="tab6" aria-controls="exp">
+                        <label for="tab6">Experience</label>
+                        <!-- Tab 7 -->
+                        <input type="radio" name="tabset" id="tab7" aria-controls="attach">
+                        <label for="tab7">Attachment</label>
+
+
+                        <div class="tab-panels">
+
+                            <div id="basic" class="tab-panel">
+
+                                <div class="row" style="margin-top:-25px;">
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Address Line 1<span class="text-danger">*</span>
+                                            <input type="text" class="form-control form-text" id="Address1" maxlength="100" />
+                                            <input type="text" class="form-control form-text" id="txtsrno" hidden />
+                                            <input type="text" class="form-control form-text" id="txtaddid" hidden />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Address Line 2
+                                            <input type="text" class="form-control form-text" id="Address2" name="Addres2" maxlength="100" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Address Line 3
+                                            <input type="text" class="form-control form-text" id="Address3" name="Addres3" maxlength="100" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            City/Tehsil
+                                            <input type="text" class="form-control form-text" id="City" name="City/Tehsil" maxlength="50" />
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-md-1 col-sm-1 ">
+                                        <span>
+                                            Country
+                                            <select id="Option" class="form-control form-text" name="Country">
+                                                <option value="India">India</option>
+                                            </select>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Pincode
+                                            <input type="number" class="form-control form-text" id="Pincode" maxlength="6" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Phone No
+                                            <input type="tel" class="form-control form-text" id="Phone" pattern="^[0-9]{0,10}$" maxlength="10" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3 ">
+                                        <span>
+                                            Fax No
+                                            <input type="number" class="form-control  form-text" id="fax" name="Fax No" maxlength="10" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3 ">
+                                        <span>
+                                            Name of Contact person
+                                            <input type="text" class="form-control form-text" id="contper" maxlength="50" />
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                                <div class="row " style="margin-top:5px">
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Designation
+                                            <input type="text" class="form-control form-text" id="designat" name="Designation" maxlength="50" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Mobile No<span class="text-danger">*</span>
+                                            <input type="number" class="form-control  form-text" id="mobile" name="Mobile No" maxlength="10" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Email Id
+                                            <input type="email" class="form-control form-text" id="emails" name="Email Id" maxlength="100" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            <br />
+                                            <button class="btn btn-success" id="AddressADD" title="Add Address" onclick="AddAddress();"><i class="fa fa-plus"></i></button>
+                                            <button class="btn btn-primary" disabled title="Update Address" id="Addressupdate"><i class="fa fa-random"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+
+                                <hr />
+                                <div class="row" style="margin-top:5px;">
+                                    <div id="address" class="col-md-12 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="statutory" class="tab-panel">
+                                <div class="row" style="margin-top:-25px;">
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Unique CIN/LLPIN No.
+                                            <input type="text" id="txtuni" asp-for="scmst.SCCIN" class="form-control form-text" pattern="[0-9A-Z]{15}" maxlength="25" required />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 ">
+                                        <span>
+                                            PAN No.
+                                            <input type="text" asp-for="scmst.SCPAN" id="Panno" class="form-control form-text" maxlength="10" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            GST Registeration Status
+                                            <select id="Gst" asp-for="scmst.SCGSTStatus" asp-items="Model.GST" class="form-control form-text custom-select">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            GST Regd State
+                                            <select asp-for="scmst.SCRegdState" class="form-control form-text custom-select" asp-items="Model.Statelist" id="State">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            GSTIN No.
+                                            <input type="text" asp-for="scmst.SCGST" id="gstno" class="form-control form-text" pattern="[0-9A-Z]{15}" maxlength="20" style="align-content:center" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        MSME Status
+                                        <select id="Msmestatus" asp-for="scmst.MSMEStatus" class="form-control form-text custom-select" asp-items="Model.Msme">
+                                            <option value="-1">--Select--</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2 ">
+                                        <span>
+                                            Type of Enterprise
+                                            <select id="typeEnterprise" asp-for="scmst.Category" class="form-control form-text custom-select" asp-items="Model.Enterprise">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Regn. Certificate No
+                                            <input type="text" id="regno" asp-for="scmst.RegisterNo" class="form-control form-text" style="align-content:center" maxlength="50" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            PF Regd. No.
+                                            <input type="text" asp-for="scmst.SCPF" class="form-control form-text" id="pfno" pattern="[A-Z]{2}/[A-Z]{3}/[0-9]{5}" maxlength="25" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            ESIC Regn. No.
+                                            <input type="text" asp-for="scmst.SCESI" class="form-control form-text" id="esicno" pattern="[0-9]{17}" maxlength="25" />
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <div class="clearfix"></div>
+                                @*
+                                <div class="row"style="margin-top:5px">
+
+                                <div class="col-md-3 col-sm-3">
+                                <span>
+                                Financial Year
+                                <input type="text" id="finan" class="form-control form-text" style="align-content:center" disabled/>
+                                </span>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                <span>
+                                Turn Over(Rs.)
+                                <input type="text" id="turnover" class="form-control form-text" style="align-content:center" disabled/>
+                                </span>
+                                </div>
+                                </div>*@
+                            </div>
+
+                            <div id="bank" class="tab-panel">
+                                <div class="row" style="margin-top: -25px;">
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Site
+                                            <select class="form-control form-text custom-select" id="sitelocation">
+                                                <option value="-1">--Select--</option>
+                                                <option value="MUMB">MUMB</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <span>
+                                            Bank Name<span class="text-danger">*</span>
+                                            <select asp-for="scmst.SCBANK" class="form-control form-text custom-select" id="banks" asp-items="Model.Banklists">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            A/C No<span class="text-danger">*</span>
+                                            <input type="number" asp-for="scmst.SCBANKAcNo" class="form-control form-text" id="ACno" style="align-content:center" maxlength="20" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            IFSC Code<span class="text-danger">*</span>
+                                            <input type="text" asp-for="scmst.SCBANKIFSC" class="form-control form-text" id="Ifsc" style="text-transform:uppercase" maxlength="15" />
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="break" style="margin-top:10px; background-color: lightcyan">
+                                    <span>
+                                        TurnOver
+                                    </span>
+                                </div>
+
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-md-2 col-sm-2 ">
+                                        <span>
+                                            Exp. In Industry
+                                            <input type="text" asp-for="scmst.SCExpConstInd" class="form-control  form-text" id="industry" style="align-content:center" maxlength="25" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <span>
+                                            Referred By
+                                            <input type="text" asp-for="scmst.ReferredBy" class="form-control  form-text" id="referred" style="align-content:center" maxlength="25" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <span>
+                                            Spl. Notes (if any)
+                                            <input type="text" asp-for="scmst.Remarks" class="form-control  form-text" id="splnote" style="align-content:center" maxlength="14" />
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Year 1
+                                            <input type="number" asp-for="scmst.Year1" id="year1" class="form-control  form-text" style="align-content:center" maxlength="5" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Turnover
+                                            <input type="number" asp-for="scmst.Turnover1" id="turnover1" class="form-control  form-text" style="align-content:center" maxlength="8" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Year 2
+                                            <input type="number" asp-for="scmst.Year2" id="year2" class="form-control  form-text" style="align-content:center" maxlength="5" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2 ">
+                                        <span>
+                                            Turnover
+                                            <input type="number" asp-for="scmst.Turnover2" id="turnover2" class="form-control form-text" style="align-content:center" maxlength="8" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Year 3
+                                            <input type="number" asp-for="scmst.Year3" id="year3" class="form-control  form-text" style="align-content:center" maxlength="5" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Turnover
+                                            <input type="number" asp-for="scmst.Turnover3" id="turnover3" class="form-control form-text" style="align-content:center" maxlength="8" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="equip" class="tab-panel">
+                                <div class="row" style="margin-top:-25px;">
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Equipment Description
+                                            <input type="text" id="equipdesc" class="form-control form-text" maxlength="50">
+                                            <input type="text" id="textequisrno" hidden class="form-control form-text">
+                                            <input type="text" id="textequiid" hidden class="form-control form-text">
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2  col-sm-2">
+                                        <span>
+                                            Make
+                                            <input type="text" id="make" class="form-control form-text" maxlength="50">
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Model
+                                            <input type="text" id="model" class="form-control form-text" maxlength="50">
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-1 col-sm-1">
+                                        <span>
+                                            Number
+                                            <input type="number" id="number" class="form-control form-text" maxlength="25">
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            <br />
+                                            <button type="button" class="btn btn-success" onclick="Addequipment();" id="equiadd"><i class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn btn-primary" id="equipUpdate" disabled><i class="fa fa-random"></i></button>
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top:5px;padding:5px;">
+
+                                    <div id="PartialEquipment" class="col-md-12 ">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="associ" class="tab-panel">
+                                <div class="row" style="margin-top:-25px;">
+                                    <div class="col-md-8 col-sm-8">
+                                        <span>
+                                            Associate Company Name
+                                            <input type="text" id="assoname" class="form-control form-text" maxlength="50">
+                                            <input type="text" id="txtassSrno" class="form-control form-text" hidden>
+                                            <input type="text" id="txtcmpid" class="form-control form-text" hidden>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-4">
+                                        <span>
+                                            <br />
+                                            <button type="button" class="btn btn-success" id="assoadd" onclick="Assocompy();"><i class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn btn-primary" id="AssoUpdate" disabled>  <i class="fa fa-random"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+
+                                <div class="row" style="margin-top:5px;padding:5px;">
+                                    <div id="PartialAssoci" class="col-md-12">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="exp" class="tab-panel">
+                                <div class="row" style="margin-top:-25px;">
+
+                                    <div class="col-md-4 col-sm-4">
+                                        <span>
+                                            Project Location
+                                            <input type="text" id="site" class="form-control form-text" maxlength="25">
+                                            <input type="text" class="form-control form-text" hidden id="txtexpsrno" />
+                                            <input type="text" class="form-control form-text" hidden id="txtwoid" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-4">
+                                        <span>
+                                            Project Name
+                                            <input type="text" id="projname" class="form-control form-text" maxlength="100">
+                                        </span>
+                                    </div>
+
+
+                                    <div class="col-md-1 col-sm-1">
+                                        <span>
+                                            Wo Value
+                                            <input type="number" id="wovalue" name='value' class="form-control form-text" maxlength="15">
+                                        </span>
+                                    </div>
+
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            <br />
+                                            <button type="button" class="btn btn-success" id="expadd" onclick="Experience();"><i class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn btn-primary" disabled id="Experienceupdate"><i class="fa fa-random"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-md-4 col-sm-4">
+                                        <span>
+                                            Project Client
+                                            <input type="text" id="client" class="form-control form-text" maxlength="100">
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-4">
+                                        <span>
+                                            State
+                                            <input type="text" id="state" class="form-control form-text" maxlength="25">
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-md-8 col-sm-8">
+                                        <span>
+                                            WO Description
+                                            <textarea maxlength="500" rows="2" cols="30" class="form-control form-text" id="wodesc" style="resize:none" form="WOdescription"></textarea>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="clearfix"> </div>
+
+                                <div class="row" style="margin-top:5px ; padding: 5px">
+                                    <div id="PartialExp" class="col-md-12">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="attach" class="tab-panel">
+
+                                <div class="row" style="margin-top:-25px;">
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            File Name
+                                            <select id="fileNameInput" class="custom-select" asp-items="Model.Attachfilepara">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                            <input type="hidden" id="Srnotext" />
+                                            <input type="hidden" id="FileNametext" />
+                                            <input type="hidden" id="AttachIDtext" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+
+                                        <span>
+                                            File Attach
+                                            <input type="file" ID="pdfInput" class="form-control form-text" accept=".pdf" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            <br />
+                                            <button type="button" ID="AdduploadButton" onclick="Uploadfile();" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                                            <button type="button" ID="UpdateAttachButton" disabled onclick="UpdateUploadfile();" class="btn btn-primary"><i class="fa fa-random"></i></button>
+                                        </span>
+                                    </div>
+
+                                    <div class="row" style="margin-top:5px;">
+                                        <div id="AttachPartial" class="col-md-12">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+
+<script>
+    //for Attachment ajax
+    var SrNo = 0;
+
+    function Uploadfile() {
+        SrNo++;
+        var fileInput = $('#pdfInput')[0]; // Get the file input element
+        var file = fileInput.files[0];
+        var CustomName = $("#fileNameInput option:selected").text();
+
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('SrNo', SrNo);
+            formData.append('CustomName', CustomName);
+            $.ajax({
+                url: '/SC/AttachPartial',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $("#fileNameInput").val("-1");
+                    $('#AttachPartial').html(response);
+                    console.log('Upload successful:', response);
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+
+            fileInput.value = '';
+            $("#fileNameInput").val('');
+        } else {
+            alert("Select Attachment")
+        }
+    }
+
+
+    function UpdateUploadfile() {
+
+        var fileInput = $('#pdfInput')[0]; // Get the file input element
+        var file = fileInput.files[0];
+        var CustomName = $("#fileNameInput option:selected").text();
+        var AttachSrNo = $("#Srnotext").val();
+        var AttachId = $("#AttachIDtext").val();
+
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('AttachSrNo', AttachSrNo);
+            formData.append('AttachId', AttachId);
+            formData.append('CustomName', CustomName);
+            $.ajax({
+                url: '../SC/UpdateAttachPartial',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('#AttachPartial').html(response);
+                    console.log('Upload successful:', response);
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+
+            fileInput.value = '';
+            $("#fileNameInput").val('');
+            document.getElementById("UpdateAttachButton").disabled = true;
+            document.getElementById("AdduploadButton").disabled = false;
+        } else {
+            alert("Select Attachment For Update")
+        }
+    }
+
+
+</script>
+
+<script type="text/javascript">
+
+    function Addressvalidate() {
+        if ($("#Address1").val() === "") {
+            return alert("Address 1 is empty. Please fill it in.");
+        }
+
+        if ($("#Address2").val() === "") {
+            return alert("Address 2 is empty. Please fill it in.");
+        }
+
+
+        if ($("#contper").val() === "") {
+            return alert("Contact person is empty. Please fill it in.");
+        }
+
+        if ($("#designat").val() === "") {
+            return alert("Designation is empty. Please fill it in.");
+        }
+
+        if ($("#mobile").val() === "") {
+            return alert("Mobile number is empty. Please fill it in.");
+        }
+
+        if ($("#emails").val() === "") {
+            return alert("Email is empty. Please fill it in.");
+        }
+
+        return true;
+    }
+
+    // For ADD Address data into jquery table
+    var srno = 0;
+    function AddAddress() {
+        ++srno;
+        var add1 = $("#Address1").val();
+        var add2 = $("#Address2").val();
+        var add3 = $("#Address3").val();
+        var city = $("#City").val();
+        var county = $("#Country").val();
+        var code = $("#Pincode").val();
+        var phone = $("#Phone").val();
+        var fax = $("#fax").val();
+        var contact = $("#contper").val();
+        var desgn = $("#designat").val();
+        var mbl = $("#mobile").val();
+        var emal = $("#emails").val();
+        if (Addressvalidate()) {
+            $.ajax({
+                type: "GET",
+                url: "/SC/AddScAdd",
+                data: {
+                    Address1: add1, Address2: add2, Address3: add3, City: city, Country: county, Pincode: code, Phone: phone,
+                    Fax: fax, namecntpern: contact, design: desgn, Mobile: mbl, Emails: emal, SRNO: srno
+                },
+                cache: false,
+                success: function (data) {
+                    $("#Address1").val('');
+                    $("#Address2").val('');
+                    $("#Address3").val('');
+                    $("#City").val('');
+                    $("#Country").val('');
+                    $("#Pincode").val('');
+                    $("#Phone").val('');
+                    $("#fax").val('');
+                    $("#contper").val('');
+                    $("#designat").val('');
+                    $("#mobile").val('');
+                    $("#emails").val('');
+
+                    $('#address').html(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                },
+            });
+        }
+    }
+
+    // For Address Update
+    $("#Addressupdate").click(function () {
+
+        var itmcd = $("#txtsrno").val();
+        var addid = $("#txtaddid").val();
+        var add1 = $("#Address1").val();
+        var add2 = $("#Address2").val();
+        var add3 = $("#Address3").val();
+        var city = $("#City").val();
+        var county = $("#Country").val();
+        var code = $("#Pincode").val();
+        var phone = $("#Phone").val();
+        var fax = $("#fax").val();
+        var contact = $("#contper").val();
+        var desgn = $("#designat").val();
+        var mbl = $("#mobile").val();
+        var emal = $("#emails").val();
+
+        if (Addressvalidate()) {
+            $.ajax({
+                type: 'POST',
+                url: '/SC/AddressUpdate',
+                data: {
+                    Id: itmcd, address: add1, AddID: addid, Address2: add2, Address3: add3, City: city, Country: county, Pincode: code, Phone: phone,
+                    Fax: fax, namecntpern: contact, design: desgn, Mobile: mbl, Emails: emal,
+                },
+                success: function (data) {
+                    $("#Address1").val('');
+                    $("#Address2").val('');
+                    $("#Address3").val('');
+                    $("#City").val('');
+                    $("#Country").val('');
+                    $("#Pincode").val('');
+                    $("#Phone").val('');
+                    $("#fax").val('');
+                    $("#contper").val('');
+                    $("#designat").val('');
+                    $("#mobile").val('');
+                    $("#emails").val('');
+                    $('#address').html(data);
+
+                },
+            });
+            document.getElementById("AddressADD").disabled = false;
+            document.getElementById("Addressupdate").disabled = true;
+        }
+    })
+
+
+    function Experiencevalidate() {
+
+        if ($("#projname").val() === "") {
+            return alert("Project Name is empty. Please fill it in.");
+        }
+
+        if ($("#wovalue").val() === "") {
+            return alert("Work Order Value is empty. Please fill it in.");
+        }
+
+        if ($("#client").val() === "") {
+            return alert("Client is empty. Please fill it in.");
+        }
+
+        if ($("#wodesc").val() === "") {
+            return alert("Work Order Description is empty. Please fill it in.");
+        }
+        return true;
+    }
+
+    // For ADD Experience data into jquery table
+    var SrNo = 0;
+    function Experience() {
+        ++SrNo;
+        var site = $("#site").val();
+        var woid = $("#txtwoid").val();
+        var pname = $("#projname").val();
+        var value = $("#wovalue").val();
+        var client = $("#client").val();
+        var state = $("#state").val();
+        var desc = $("#wodesc").val();
+        if (Experiencevalidate()) {
+            $.ajax({
+                type: "GET",
+                url: "/SC/experiencesc",
+                data: { Site: site, Projname: pname, Value: value, Client: client, State: state, Wodes: desc, SrNo: SrNo, SCWOId: woid },
+                cache: false,
+                success: function (data) {
+                    $("#site").val('');
+                    $("#txtwoid").val('');
+                    $("#projname").val('');
+                    $("#wovalue").val('');
+                    $("#client").val('');
+                    $("#state").val('');
+                    $("#wodesc").val('');
+                    $('#PartialExp').html(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        }
+    }
+    // For Experience Update
+    $("#Experienceupdate").click(function () {
+
+        var itmcd = $("#txtexpsrno").val();
+        var site = $("#site").val();
+        var woid = $("#txtwoid").val();
+        var pname = $("#projname").val();
+        var value = $("#wovalue").val();
+        var client = $("#client").val();
+        var state = $("#state").val();
+        var desc = $("#wodesc").val();
+        if (Experiencevalidate()) {
+            $.ajax({
+                type: 'POST',
+                url: '/SC/ExperienceUpdate',
+                data: { SrNo: itmcd, Site: site, Projname: pname, Value: value, Client: client, State: state, Wodes: desc, SCWOId: woid },
+                success: function (data) {
+                    $("#site").val('');
+                    $("#txtwoid").val('');
+                    $("#projname").val('');
+                    $("#wovalue").val('');
+                    $("#client").val('');
+                    $("#state").val('');
+                    $("#wodesc").val('');
+
+                    $('#PartialExp').html(data);
+
+
+                },
+            });
+            document.getElementById("Experienceupdate").disabled = true;
+            document.getElementById("expadd").disabled = false;
+        }
+    })
+
+    function Assocompyvalidate() {
+        if ($("#assoname").val() === "") {
+            return alert("Associate Name is empty. Please fill it in.");
+        }
+        return true;
+    }
+
+    // For ADD Associate company data into jquery table
+    var SrNo = 0;
+    function Assocompy() {
+        ++SrNo;
+        var asso = $("#assoname").val()
+        var cmpid = $("#txtcmpid").val()
+        if (Assocompyvalidate()) {
+            $.ajax({
+                type: "GET",
+                url: "/SC/Assocompy",
+                data: { Asscompany: asso, SrNo: SrNo, SCAssCmpId: cmpid },
+                cache: false,
+                success: function (data) {
+                    $("#assoname").val('');
+                    $("#txtcmpid").val('');
+                    $('#PartialAssoci').html(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        }
+    }
+    // For Associate Update
+    $("#AssoUpdate").click(function () {
+
+        var itmcd = $("#txtassSrno").val();
+        var scmpid = $("#txtcmpid").val();
+        var asso = $("#assoname").val();
+        if (Assocompyvalidate()) {
+            $.ajax({
+                type: 'POST',
+                url: '/SC/AsscocompyUpdate',
+                data: { SrNo: itmcd, Asscompany: asso, SCAssCmpId: scmpid },
+                success: function (data) {
+                    $("#assoname").val('');
+                    $("#txtcmpid").val('');
+                    $("#txtassSrno").val('');
+                    $('#PartialAssoci').html(data);
+
+                },
+            });
+
+            document.getElementById("AssoUpdate").disabled = true;
+            document.getElementById("assoadd").disabled = false;
+        }
+    })
+
+    function Equipmentvalidate() {
+        if ($("#equipdesc").val() === "") {
+            return alert("Equipment Description is required.");
+        }
+        if ($("#make").val() === "") {
+            return alert("Equipment Make is required.");
+        }
+        if ($("#model").val() === "") {
+            return alert("Equipment Model is required.");
+        }
+        if ($("#number").val() === "") {
+            return alert("Number Of Equipment is required.");
+        }
+        return true;
+    }
+
+
+    // For ADD Equipment data into jquery table
+    var srno = 0;
+    function Addequipment() {
+        ++srno;
+        var add1 = $("#equipdesc").val();
+        var add2 = $("#make").val();
+        var add3 = $("#model").val();
+        var city = $("#number").val();
+        var EquipID = $("#textequiid").val();
+        if (Equipmentvalidate()) {
+            $.ajax({
+                type: "GET",
+                url: "/SC/Equipsc",
+                data: { ScEquipDes: add1, ScEquipMake: add2, ScEquipModel: add3, ScEquipNo: city, Srno: srno, Equipid: EquipID },
+                cache: false,
+                success: function (data) {
+                    $("#equipdesc").val('');
+                    $("#make").val('');
+                    $("#model").val('');
+                    $("#number").val('');
+                    $("#textequiid").val('');
+
+                    $('#PartialEquipment').html(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        }
+    }
+    // For Equipment Update
+    $("#equipUpdate").click(function () {
+
+        var itmcd = $("#textequisrno").val();
+        var add1 = $("#equipdesc").val();
+        var add2 = $("#make").val();
+        var add3 = $("#model").val();
+        var city = $("#number").val();
+        var EquipID = $("#textequiid").val();
+        if (Equipmentvalidate()) {
+            $.ajax({
+                type: 'POST',
+                url: '/SC/EquipmentUpdate',
+                data: { SrNo: itmcd, ScEquipDes: add1, ScEquipMake: add2, ScEquipModel: add3, ScEquipNo: city, Equipid: EquipID },
+                cache: false,
+                success: function (data) {
+                    $("#equipdesc").val('');
+                    $("#make").val('');
+                    $("#model").val('');
+                    $("#number").val('');
+                    $("#textequiid").val('');
+                    $('#PartialEquipment').html(data);
+
+                },
+            });
+
+            document.getElementById("equipUpdate").disabled = true;
+            document.getElementById("equiadd").disabled = false;
+        }
+    })
+
+
+    // for data send into textbox
+    $(".Pendingsc").click(function () {
+
+        var pan = $(this).data("reg");
+        var fin = $(this).data("finan");
+        var turn = $(this).data("turn");
+        var bank = $(this).data("bank");
+        var ac = $(this).data("ac");
+        var ifsc = $(this).data("ifsc");
+        var name = $(this).data("name");
+        var pan = $(this).data("pan");
+        var gst = $(this).data("gst");
+        var gst = $(this).data("add1");
+
+        $("#panno").val(pan);
+        $("#finan").val(fin);
+        $("#turnover").val(turn);
+        $("#banks").val(bank);
+        $("#ACno").val(ac);
+        $("#Ifsc").val(ifsc);
+        $("#SCName").val(name);
+        $("#panno").val(pan);
+        $("#gstno").val(gst);
+        $("#go").val(gst);
+
+        var Addmodal = document.getElementById("btnSClistOpen");
+        Addmodal.style.display = "block";
+
+    });
+
+</script>
+
+<script>
+    $("#Mstadd").click(function () {
+        var itmcd = $("#txtscname").val();
+        var add1 = $("#txtscreg").val();
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/SC/PartialScmst',
+            data: { SCName: itmcd, ScReg: add1 },
+            cache: false,
+            success: function (data) {
+
+                $('#partilaSCmst').html(data);
+
+            },
+        });
+    });
+</script>
+
+
+<script>
+    function ValidationSC() {
+
+        var site = $("#Sitelist").val();
+        var scname = $("#SCName").val();
+        var compty = $("#compy :selected").val();
+        var comptyid = $("#compy").val();
+        var ccin = $("#txtuni").val();
+        var pan = $("#Panno").val();
+        var sTATES = $("#State :selected").text();
+        var sTATEScode = $("#State :selected").val();
+        var gststatus = $("#Gst").val();
+        var gstno = $("#gstno").val();
+        var memsstatus = $("#Msmestatus").val();
+        var enterprise = $("#typeEnterprise").val();
+        var reg = $("#regno").val();
+        var pfno = $("#pfno").val();
+        var esicno = $("#esicno").val();
+        var gstsubstring = gstno.substring(0, 2);
+        var panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+        var attchdrop = $("#fileNameInput option:selected").text();
+        var ESIC = $("#fileNameInput option:selected").text();
+
+
+        if (site == null || site == '') {
+            alert("Please Select Site ", this);
+            return false;
+        }
+
+
+        if (scname == null || scname == "") {
+            alert("SC Name Can Not Be Left Blank", this);
+            return false;
+        }
+
+        if (compty == "-1") {
+            alert("Please Select Company Type", this);
+            return false;
+        }
+
+        if (comptyid == 1 || comptyid == 2 || comptyid == 3) {
+            if (ccin == null || ccin == "") {
+                alert("CIN/LLPIN No Can not be left blank", this);
+                return false;
+            }
+        }
+
+        if (pan == null || pan == "") {
+            alert("PAN no Can not be left blank", this); return false;
+        }
+
+        if (panPattern.test(pan)) {
+
+        }
+        else {
+            alert("Invalid PAN card number. Enter in Capital Letter", this); return false;
+
+        }
+
+        if (sTATES == "-1") {
+            alert("Please Select State", this);
+            return false;
+        }
+
+        if (gststatus == "-1") {
+            if (gstno == null || gstno == "") {
+                alert("GSIN No. Can Not Be Left Blank", this);
+                return false;
+            }
+        }
+
+        if (gststatus <= 4)  // check length pending
+        {
+            if (gstno.Length > 15 || gstno.Length < 15) {
+                alert("GST No. Length Can not be more or less than 15", this);
+                return false;
+            }
+        }
+
+        if (gststatus < 4) {
+            if (gstno == null || gstno == "") {
+                alert("GSIN No. Can Not Be Left Blank", this);
+                return false;
+            }
+
+            if (sTATEScode != gstsubstring) {
+                alert('GSIN Registered State Does Not Match With GSTIN No.');
+                return false;
+            }
+        }
+
+        if (memsstatus == "-1") {
+            alert("Please Select MSME Status", this); return false;
+        }
+
+        if (memsstatus == 1) {
+            if (enterprise == "-1") {
+                alert("Type of Enterprise Can not be Blank", this); return false;
+            }
+            if (reg == null || reg == "") {
+                alert("Regn. Certificate No Can not be Blank", this); return false;
+            }
+        }
+        return true;
+    }
+
+    var Activestatus = 0;
+    var scstatus = 0;
+    function SaveButn() {
+        scstatus = 1;
+        Activestatus = true;
+
+        var site = $("#Sitelist :selected").text();
+        var scname = $("#SCName").val();
+        var compty = $("#compy").val();
+        var ccin = $("#txtuni").val();
+        var pan = $("#Panno").val();
+        var gststatus = $("#Gst option:selected").val();
+        var GstText = $("#Gst option:selected").text();
+        var state = $("#State").val();
+        var gstno = $("#gstno").val();
+        var memsstatus = $("#Msmestatus option:selected").val();
+        var enterprise = $("#typeEnterprise option:selected").val();
+        var reg = $("#regno").val();
+        var pfno = $("#pfno").val();
+        var esicno = $("#esicno").val();
+        var sitebank = $("#site").val();
+        var bank = $("#banks").val();
+        var acno = $("#ACno").val();
+        var ifsc = $("#Ifsc").val();
+        var indus = $("#industry").val();
+        var reffer = $("#referred").val();
+        var note = $("#splnote").val();
+        var year1 = $("#year1").val();
+        var turn1 = $("#turnover1").val();
+        var year2 = $("#year2").val();
+        var turn2 = $("#turnover2").val();
+        var year3 = $("#year3").val();
+        var turn3 = $("#turnover3").val();
+
+        if (ValidationSC()) {
+            Swal.fire({
+                title: 'Are you sure? Do you want to Save?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Save!'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/SC/Insert',
+                        data: {
+                            Activest: Activestatus, SCStatus: scstatus, Site: site, SCName: scname, Compy: compty, CIINo: ccin, Pan: pan, Gststatus: gststatus, GstText: GstText, State: state, Gstno: gstno, MeseStatus: memsstatus, EnterPrise: enterprise, Regno: reg, Pfno: pfno, Esic: esicno,
+                            SIte: sitebank, Bank: bank, AC: acno, Ifsc: ifsc, Industry: indus, Reffered: reffer, Note: note, Year1: year1, Turn1: turn1, Year2: year2, Turn2: turn2, Year3: year3, Turn3: turn3
+                        },
+                        cache: false,
+                        success: function (data) {
+
+                            if (data.success) {
+                                window.location.href = '/SC/Index';
+                            }
+                            else {
+                                alert(data.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert(data);
+                        }
+                    });
+                }
+                else {
+                    Swal.fire('SC Creation  has not been saved', '', 'info');
+                }
+            });
+        };
+
+    };
+</script>
+
+
+<script>
+    $("#Approval").click(function () {
+
+        if (ValidationSC()) {
+            Swal.fire({
+                title: 'Do you want to Approve ?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Approve'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $("#Sendata").attr("action", "/SC/Approval");
+                    $("#Sendata").submit();
+                }
+                else {
+                    Swal.fire('SC Creation has not been Approved', '', 'info');
+                }
+            });
+        }
+    });
+
+    function UpdateSC() {
+        if (ValidationSC()) {
+            $("#Sendata").attr("action", "/SC/UpdateSC");
+            $("#Sendata").submit();
+        }
+    }
+
+    $("#Verification").click(function () {
+
+        if (ValidationSC()) {
+            Swal.fire({
+                title: ' Do you want to Verify ?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Verify!'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    $("#Sendata").attr("action", "/SC/Verification");
+                    $("#Sendata").submit();
+                }
+                else {
+                    Swal.fire('SC Creation has not been Verified', '', 'info');
+                }
+            });
+        }
+    });
+</script>
+
+
+
+<script>
+    $("#Reject").click(function () {
+
+        if (ValidationSC()) {
+            Swal.fire({
+                title: 'Are you sure?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Reject it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $("#Sendata").attr("action", "/SC/RejectSC");
+                    $("#Sendata").submit();
+                }
+            });
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+
+
+
+        $("#reload").click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '../SC/Refresh',
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "../SC/AddScAdd",
+            data: {},
+            cache: false,
+            success: function (data) {
+                $('#address').html(data);
+            },
+        });
+
+
+        $.ajax({
+            type: "GET",
+            url: "../SC/experiencesc",
+            data: {},
+            cache: false,
+            success: function (data) {
+                $('#PartialExp').html(data);
+            },
+        });
+
+
+        $.ajax({
+            type: "GET",
+            url: "../SC/Assocompy",
+            data: {},
+            cache: false,
+            success: function (data) {
+                $('#PartialAssoci').html(data);
+            },
+        });
+
+
+        $.ajax({
+            type: "GET",
+            url: "../SC/Equipsc",
+            data: {},
+            cache: false,
+            success: function (data) {
+                $('#PartialEquipment').html(data);
+            },
+        });
+
+        $.ajax({
+            url: '../SC/PageAttachPartial',
+            data: {},
+            method: 'POST',
+            success: function (response) {
+                $('#AttachPartial').html(response);
+
+            },
+        });
+
+
+
+    });
+</script>

@@ -1,0 +1,981 @@
+﻿@model IMS_Model.CommonDropDown.ViewModel.SiteMst_vm
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+
+            if (successMessage !== "" && successMessage == null) {
+                alert(successMessage);
+            } else if (successMessage !== "" && successMessage == null) {
+                alert(errorMessage);
+            }
+        });
+    </script>
+    <style>
+        .firstrow {
+            margin-top: -15px;
+        }
+
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 120px;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content Separate For All POPup */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 85%;
+            height: 70%;
+            overflow-y: scroll;
+            overflow-x: scroll;
+        }
+
+        /* The Close Button */
+        .close {
+            color: red;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: end;
+            margin-top: -20px;
+        }
+
+            .close:hover, .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+        <form method="post">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Site Master Creation </h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+                            @* for buttons *@
+                            <a type="button" class="btn btn-outline-dark custombtn" asp-controller="SiteMstSetting" asp-action="Index" title="Back"><i class="fa fa-backward"></i></a>
+
+                            @if (Model != null)
+                            {
+                                @if (Model.SiteMaster != null)
+                                {
+                                    <button type="submit" class="btn btn-outline-primary custombtn" asp-action="UpdateSiteCreation" title="Update"><i class="fa fa-random"></i></button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-success custombtn" asp-action="SiteCreation" title="Save"><i class="fa fa-save"></i></button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success custombtn" asp-action="SiteCreation" title="Save"><i class="fa fa-save"></i></button>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="tabset" style="margin-top:-10px;">
+                        <!-- Tab 1 -->
+                        <input type="radio" name="tabset" id="tab1" aria-controls="basic" checked>
+                        <label for="tab1">Basic Details</label>
+
+                        <input type="radio" name="tabset" id="tab2" aria-controls="email">
+                        <label for="tab2">Email Details</label>
+
+                        @if (Model.SiteMaster != null)
+                        {
+                            <!-- Tab 3 -->
+                            <input type="radio" name="tabset" id="tab3" aria-controls="store">
+                            <label for="tab3">Store Details</label>
+                            <!-- Tab 4 -->
+                            <input type="radio" name="tabset" id="tab4" aria-controls="sitestatus">
+                            <label for="tab4">Site Status</label>
+                        }
+
+                        <div class="tab-panels">
+                            <div id="basic" class="tab-panel">
+                                <div class="row" style="margin-top:-25px;">
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Company Name
+                                            <select type="text" id="CompName" asp-for="SiteMaster.CompId" class="form-control form-text" asp-items="@Model.CompMstList">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                            <span asp-validation-for="SiteMaster.CompId" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Site Code
+                                            <input asp-for="SiteMaster.SiteCode" id="sitecode" type="text" class="form-control form-text" />
+                                            @if (Model != null)
+                                            {
+                                                <input asp-for="SiteMaster.SiteId" type="hidden" class="form-control form-text" />
+                                            }
+                                            <span asp-validation-for="SiteMaster.SiteCode" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Site Name
+                                            <input asp-for="SiteMaster.SiteName" id="sitename" type="text" class="form-control form-text" />
+                                            <span asp-validation-for="SiteMaster.SiteName" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Site Start Date
+                                            <input type="date" id="stdate" asp-for="SiteMaster.SiteStdt" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control form-text" />
+                                            <span asp-validation-for="SiteMaster.SiteStdt" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Site GSTIN
+                                            <input asp-for="SiteMaster.SiteGSTN" id="sitegstin" type="text" class="form-control form-text" oninput="updateStateDropdown(this.value)" />
+                                            <span asp-validation-for="SiteMaster.SiteGSTN" class="text-danger"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            CMS Bank Code
+                                            <input asp-for="SiteMaster.BANKCHQREF" id="bankchq" type="text" class="form-control form-text" />
+                                            <span asp-validation-for="SiteMaster.BANKCHQREF" class="text-danger"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="card" style="margin-top:20px">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3 col-sm-3">
+                                                <h5>Address Details</h5>
+                                            </div>
+                                            <div class="col-md-9 col-sm-9 text-right">
+                                                <button type="button" class="btn btn-success" title="OpenPopUp" onclick="AddPopUp()"><i class="fa fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div id="renderPartialAddView" class="col-md-12 col-sm-12">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="email" class="tab-panel">
+                                <div class="row" style="margin-top:-25px;">
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Email Type
+                                            <input type="hidden" id="emailsrno" />
+                                            <input type="hidden" id="emailid" />
+                                            <select id="emailTypeSelect" class="form-control form-text" asp-items="@Model.EmailTypList">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Email Address
+                                            <input id="emailAddressInput" class="form-control form-text" type="email" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Person Name
+                                            <input id="personNameInput" class="form-control form-text" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Mobile Number
+                                            <input type="tel" id="mobileNumberInput" class="form-control form-text" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <br />
+                                            <button type="button" id="Addemail" class="btn btn-success" title="Add"><i class="fa fa-plus"></i></button>
+                                            <button type="button" id="Updateemail" disabled class="btn btn-primary" title="Update"><i class="fa fa-random"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:25px;">
+                                    <div id="renderemail" class="col-md-12 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="store" class="tab-panel">
+                                <div class="row" style="margin-top:-25px">
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Site Code
+                                            <input id="storesite" class="form-control form-text" readonly />
+                                            <input id="storesrno" type="hidden" />
+                                            <input id="storeId" type="hidden" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Bulk Store
+                                            <select id="bulkstore" class="form-control form-text" asp-items="Model.AddYesNo">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Store Code
+                                            <input id="storecode" class="form-control form-text" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            Store Description
+                                            <input id="storedes" class="form-control form-text" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
+                                        <span>
+                                            <br />
+                                            <button type="button" id="AddStore" class="btn btn-success" title="Add Store"><i class="fa fa-plus"></i></button>
+                                            <button type="button" id="UpdateStore" disabled class="btn btn-primary" title="Update Store"><i class="fa fa-random"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:25px;">
+                                    <div id="renderstore" class="col-md-12 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="sitestatus" class="tab-panel">
+                                <div class="row" style="margin-top:-25px">
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Site Code
+                                            <input id="statusCodeSite" type="text" readonly class="form-control form-text" />
+                                            <input id="srnostatus" type="hidden" class="form-control form-text" />
+                                            <input id="statusId" type="hidden" class="form-control form-text" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Site Status Code
+                                            <select class="form-control form-text" id="statuscode" asp-items="@Model.SiteStatus">
+                                                <option value="-1">--Select--</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            Effective Date
+                                            <input type="date" id="effecdt" class="form-control form-text" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <span>
+                                            Remarks
+                                            <input id="statusremark" class="form-control form-text" />
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2">
+                                        <span>
+                                            <br />
+                                            <button type="button" id="AddStatus" class="btn btn-success" title="AddStatus"><i class="fa fa-plus"></i></button>
+                                            <button type="button" id="UpdateStatus" disabled class="btn btn-primary" title="UpdateStatus"><i class="fa fa-random"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:25px;">
+                                    <div id="renderstatus" class="col-md-12 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal content 1-->
+    <div id="Addpopup" class="modal">
+        <div class="modal-content">
+            <span class="close btnclose">&times;</span>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="container-fluid">
+                <div class="row" style="margin-top:30px;">
+
+                    <div class="col-md-3 col-sm-3">
+                        <span>
+
+                            Address Type<span class="text-danger">*</span>
+                            <input type="hidden" id="siteaddId" />
+                            <input type="hidden" id="SiteSrNo" />
+                            <select type="text" id="AddressType" class="form-control form-text" asp-items="@Model.AddTypeList">
+                                <option value="-1">--Select--</option>
+                            </select>
+
+                        </span>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <span>
+                            Address Line 1<span class="text-danger">*</span>
+                            <input type="text" id="AddressLine1" class="form-control form-text" maxlength="100" />
+                        </span>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <span>
+                            Address Line 2
+                            <input type="text" id="AddressLine2" class="form-control form-text" name="Addres2" maxlength="100" />
+                        </span>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <span>
+                            Address Line 3
+                            <input type="text" id="AddressLine3" class="form-control form-text" name="Addres3" maxlength="100" />
+                        </span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:5px">
+                    <div class="col-md-2 col-sm-2">
+                        <span>
+                            Country
+                            <select type="text" id="Country" class="form-control form-text" asp-items="Model.CountryList">
+                                <option value="-1">--Select--</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <span>
+                            State
+                            <select type="text" readonly id="State" class="form-control" onchange="GetCitybyState(this.value);" asp-items="@Model.Statelist">
+                                <option selected value="-1">--Select--</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <span>
+                            City
+                            <select type="text" id="ddlCity" class="form-control form-text" asp-items="@Model.CityMstList">
+                                <option value="-1">--Select--</option>
+                            </select>
+                        </span>
+                    </div>
+
+                    <div class="col-md-2 col-sm-2">
+                        <span>
+                            Pincode
+                            <input type="number" class="form-control form-text" id="Pincode" maxlength="6" />
+                        </span>
+                    </div>
+
+                    <div class="col-md-2 col-sm-2">
+                        <span>
+                            Phone No
+                            <input type="tel" class="form-control form-text" id="Phone" pattern="^[0-9]{0,10}$" maxlength="10" />
+                        </span>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <span>
+                            <br />
+                            <button type="button" class="btn btn-success" id="Addaddress" title="Add " onclick="AddAddress()"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-primary" id="UpdateAddress" disabled title="Update Address"><i class="fa fa-random"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+
+    function AddPopUp() {
+        document.getElementById("Addpopup").style.display = "block";
+    }
+
+    $(".btnclose").click(function () {
+        document.getElementById("Addpopup").style.display = "none";
+    });
+
+    $(document).ready(function () {
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+    });
+
+
+    function updateStateDropdown(gstinValue) {
+        var GstId = gstinValue;
+        var data = GstId.substring(0, 2);
+        $('#State').val(data);
+    }
+
+    function GetCitybyState(selectedStateId) {
+        if (selectedStateId !== "-1") {
+            $.ajax({
+                type: 'GET',
+                url: '../SiteMstSetting/ddlCityBind',
+                data: { iStCode: selectedStateId },
+                cache: false,
+                success: function (data) {
+                    $('#ddlCity').empty();
+                    $("#ddlCity").append($("<option />").val("-1").text("--Select--"));
+                    $.each(data, function () {
+                        $("#ddlCity").append($("<option />").val(this.cityId).text(this.cityDispName));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX request failed:', status, error);
+                }
+            });
+        }
+    }
+
+    function validateAddress() {
+        if ($("#AddressType").val() == null || $("#AddressType").val() === '') {
+            alert("Please select Address Type");
+            return false;
+        }
+
+        if ($("#AddressLine1").val() == null || $("#AddressLine1").val() === '') {
+            alert("Address Line 1 can not be left blank");
+            return false;
+        }
+
+    @*  if ($("#AddressLine2").val() == null || $("#AddressLine2").val() === '') {
+            alert("Address Line 2 can not be left blank");
+            return false;
+            }
+
+            if ($("#AddressLine3").val() == null || $("#AddressLine3").val() === '') {
+            alert("Address Line 3 can not be left blank");
+            return false;
+            } *@
+
+                    if ($("#Country").val() == null || $("#Country").val() === '-1') {
+            alert("Please select Country");
+            return false;
+        }
+
+        if ($("#State").val() == null || $("#State").val() === '-1') {
+            alert("Please select State");
+            return false;
+        }
+
+        if ($("#ddlCity").val() == null || $("#ddlCity").val() === '-1') {
+            alert("Please select City");
+            return false;
+        }
+
+        if ($("#Pincode").val() == null || $("#Pincode").val() === '') {
+            alert("Pincode can not be left blank");
+            return false;
+        }
+
+        if ($("#Phone").val() == null || $("#Phone").val() === '') {
+            alert("Phone number can not be left blank");
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    // For ADD Address data into jquery table
+    var srno = 0;
+    function AddAddress() {
+        ++srno;
+        var addressType = $("#AddressType").val();
+        var addressLine1 = $("#AddressLine1").val();
+        var addressLine2 = $("#AddressLine2").val();
+        var addressLine3 = $("#AddressLine3").val();
+        var country = $("#Country").val();
+        var state = $("#State").val();
+        var city = $("#ddlCity").val();
+        var pincode = $("#Pincode").val();
+        var phone = $("#Phone").val();
+
+        if (validateAddress()) {
+            $.ajax({
+                type: "POST",
+                url: "../SiteMstSetting/_SiteAddressMst",
+                data: {
+                    srno: srno,
+                    addressType: addressType,
+                    addressLine1: addressLine1,
+                    addressLine2: addressLine2,
+                    addressLine3: addressLine3,
+                    country: country,
+                    state: state,
+                    city: city,
+                    pincode: pincode,
+                    phone: phone
+                },
+                cache: false,
+                success: function (data) {
+                    $("#AddressType").val("-1");
+                    $("#Country").val("-1");
+                    $("#State").val("-1");
+                    $("#ddlCity").val("-1");
+                    $("#siteaddId,#AddressLine1, #AddressLine2, #AddressLine3,#Pincode, #Phone").val("");
+                    document.getElementById("Addpopup").style.display = "none";
+                    $("#renderPartialAddView").html(data);
+                },
+            });
+
+        }
+    }
+
+    $("#UpdateAddress").click(function () {
+        var SrNo = $("#SiteSrNo").val();
+        var SiteId = $("#siteaddId").val();
+        var addressType = $("#AddressType").val();
+        var addressLine1 = $("#AddressLine1").val();
+        var addressLine2 = $("#AddressLine2").val();
+        var addressLine3 = $("#AddressLine3").val();
+        var country = $("#Country").val();
+        var state = $("#State").val();
+        var city = $("#ddlCity").val();
+        var pincode = $("#Pincode").val();
+        var phone = $("#Phone").val();
+
+        if (validateAddress()) {
+
+            $.ajax({
+                type: "POST",
+                url: "../SiteMstSetting/AddressUpdate",
+                data: {
+                    AddSrNo: SrNo,
+                    SiteId: SiteId,
+                    addressType: addressType,
+                    addressLine1: addressLine1,
+                    addressLine2: addressLine2,
+                    addressLine3: addressLine3,
+                    country: country,
+                    state: state,
+                    city: city,
+                    pincode: pincode,
+                    phone: phone
+                },
+                success: function (data) {
+                    $("#AddressType").val("-1");
+                    $("#Country").val("-1");
+                    $("#State").val("-1");
+                    $("#ddlCity").val("-1");
+                    $("#siteaddId,#AddressLine1, #AddressLine2, #AddressLine3,#Pincode, #Phone").val("");
+                    document.getElementById("Addpopup").style.display = "none";
+                    $("#renderPartialAddView").html(data);
+                },
+                complete: function () {
+                    $("#Addaddress").prop("disabled", false);
+                    $("#UpdateAddress").prop("disabled", true);
+                },
+            });
+        }
+    });
+</script>
+<script>
+    // Declare variables outside the event handler
+    let EmailSrNO = 0;
+    let emailType, emailAddress, personName, mobileNumber;
+
+    // ValidateEmail function
+    function ValidateEmail() {
+        if (emailType == '-1' || emailType === '') {
+            alert("Please select an Email Type");
+            return false;
+        }
+
+        if (emailAddress == null || emailAddress === '') {
+            alert("Email Address cannot be left blank");
+            return false;
+        }
+
+        if (personName == null || personName === '') {
+            alert("Person's Name cannot be left blank");
+            return false;
+        }
+
+        if (mobileNumber == null || mobileNumber === '') {
+            alert("Mobile Number cannot be left blank");
+            return false;
+        } else if (!/^\d{10}$/.test(mobileNumber)) {
+            alert("Please enter a valid 10-digit mobile number");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Add Email event handler
+    $("#Addemail").click(function () {
+        EmailSrNO++;
+
+        // Assign values to the declared variables
+        emailType = $("#emailTypeSelect :selected").val();
+        emailAddress = $("#emailAddressInput").val();
+        personName = $("#personNameInput").val();
+        mobileNumber = $("#mobileNumberInput").val();
+
+        if (ValidateEmail()) {
+            $.ajax({
+                type: "POST",
+                url: "../SiteMstSetting/_SiteEmailMst",
+                data: {
+                    EmailSrNO: EmailSrNO,
+                    emailType: emailType,
+                    emailAddress: emailAddress,
+                    personName: personName,
+                    mobileNumber: mobileNumber
+                },
+                success: function (data) {
+                    $("#emailTypeSelect").val("-1");
+                    $("#emailAddressInput, #personNameInput, #mobileNumberInput").val("");
+                    $("#renderemail").html(data);
+                },
+                error: function (error) {
+                    // Handle errors if necessary
+                    console.error("Error in AJAX request:", error);
+                }
+            });
+        }
+    });
+
+    // Update Email event handler
+    $("#Updateemail").click(function () {
+        let emailsrno = $("#emailsrno").val();
+        let emailId = $("#emailid").val();
+        emailType = $("#emailTypeSelect").val();
+        emailAddress = $("#emailAddressInput").val();
+        personName = $("#personNameInput").val();
+        mobileNumber = $("#mobileNumberInput").val();
+
+        if (ValidateEmail()) {
+            $.ajax({
+                type: "POST",
+                url: "/SiteMstSetting/EmailUpdate",
+                data: {
+                    emailsrno: emailsrno,
+                    emailId: emailId,
+                    emailType: emailType,
+                    emailAddress: emailAddress,
+                    personName: personName,
+                    mobileNumber: mobileNumber
+                },
+                success: function (data) {
+                    $("#emailTypeSelect").val("-1");
+                    $("#emailsrno, #emailid, #emailAddressInput, #personNameInput, #mobileNumberInput").val("");
+                    $("#renderemail").html(data);
+
+                    $("#Addemail").prop("disabled", false);
+                    $("#Updateemail").prop("disabled", true);
+                },
+                error: function (error) {
+                    console.error("Error in AJAX request:", error);
+                }
+            });
+        }
+    });
+</script>
+
+
+<script>
+
+    function validateStoreData() {
+        var bulkstore = $("#bulkstore :selected").val();
+        var storecode = $("#storecode").val();
+        var storedes = $("#storedes").val();
+
+        if (bulkstore == '-1' || bulkstore === '') {
+            alert("Please select Bulk Store");
+            return false;
+        }
+
+        if (storecode == null || storecode === '') {
+            alert("Please enter Store Code");
+            return false;
+        }
+        if (storedes == null || storedes === '') {
+            alert("Please enter Store Description");
+            return false;
+        }
+
+        return true;
+    }
+
+    var StoreSrNO = 0;
+    $("#AddStore").click(function () {
+        StoreSrNO++;
+        
+        var storesite = $("#storesite").val();
+        var bulkstore = $("#bulkstore :selected").val();
+        var storecode = $("#storecode").val();
+        var storedes = $("#storedes").val();
+        if (validateStoreData()) {
+            $.ajax({
+                type: "GET",
+                url: "../SiteMstSetting/_SiteStoreMst",
+                data: {
+                    StoreSrNO: StoreSrNO,
+                    Storesite: storesite,
+                    BulkStore: bulkstore,
+                    Storecode: storecode,
+                    StoreDes: storedes,
+                },
+                success: function (data) {
+                    $("#bulkstore").val("-1");
+                    $("#storesite, #storecode, #storedes").val("");
+                    $("#renderstore").html(data);
+                },
+                error: function (error) {
+                    console.error("Error in AJAX request:", error);
+                }
+            });
+        }
+    });
+
+
+
+    $("#UpdateStore").click(function () {
+
+        var storesrno = $("#storesrno").val();
+        var storeId = $("#storeId").val();
+        var storesite = $("#storesite").val();
+        var bulkstore = $("#bulkstore :selected").val();
+        var storecode = $("#storecode").val();
+        var storedes = $("#storedes").val();
+        if (validateStoreData()) {
+            $.ajax({
+                type: "POST",
+                url: "/SiteMstSetting/StoreUpdate",
+                data: {
+                    StoreId: storeId,
+                    StoreSrNO: storesrno,
+                    BulkStore: bulkstore,
+                    Storesite: storesite,
+                    Storecode: storecode,
+                    StoreDes: storedes,
+                },
+                success: function (data) {
+                    $("#bulkstore").val("-1");
+                    $("#storesite, #storecode, #storedes,#storesrno,#storeId").val("");
+                    $("#renderstore").html(data);
+
+                    document.getElementById("AddStore").disabled = false;
+                    document.getElementById("UpdateStore").disabled = true;
+                },
+                error: function (error) {
+                    console.error("Error in AJAX request:", error);
+                }
+
+            });
+        }
+    });
+
+
+    function validateStatusData() {
+
+        var statuscode = $("#statuscode :selected").val();
+        var effedt = $("#effecdt").val();
+        var remark = $("#statusremark").val();
+
+
+        if (statuscode == "-1") {
+            alert("Please Select Status Code");
+            return false;
+        }
+
+        if (!effedt) {
+            alert("Please enter Effective Date");
+            return false;
+        }
+
+        if (!remark) {
+            alert("Please enter Remark");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    var StatusSrNO = 0;
+    $("#AddStatus").click(function () {
+        StatusSrNO++;
+
+        var sitecode = $("#statusCodeSite").val();
+        var statuscode = $("#statuscode").val();
+        var effedt = $("#effecdt").val();
+        var remark = $("#statusremark").val();
+
+        if (validateStatusData()) {
+            $.ajax({
+                type: "GET",
+                url: "../SiteMstSetting/_SiteStatusMst",
+                data: {
+                    SRNo: StatusSrNO,
+                    SiteCode: sitecode,
+                    Statuscode: statuscode,
+                    Effecdt: effedt,
+                    Remark: remark,
+                },
+                success: function (data) {
+                    $("#statuscode").val("-1");
+                    $("#statusCodeSite,#effecdt,#statusremark").val("");
+                    $("#renderstatus").html(data);
+                },
+                error: function (error) {
+                    console.error("Error in AJAX request:", error);
+                }
+            });
+        }
+    });
+
+
+    $("#UpdateStatus").click(function () {
+        var StatusSrNO = $("#srnostatus").val();
+        var StatusId = $("#statusId").val();
+        var sitecode = $("#statusCodeSite").val();
+        var statuscode = $("#statuscode").val();
+        var effedt = $("#effecdt").val();
+        var remark = $("#statusremark").val();
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/StatusUpdate",
+            data: {
+                SRNo: StatusSrNO,
+                StatusId: StatusId,
+                SiteCode: sitecode,
+                Statuscode: statuscode,
+                Effecdt: effedt,
+                Remark: remark,
+            },
+            success: function (data) {
+                $("#statuscode").val("-1");
+                $("#srnostatus, #statusId, #statusCodeSite, #effecdt, #statusremark").val("");
+                $("#renderstatus").html(data);
+
+                document.getElementById("AddStatus").disabled = false;
+                document.getElementById("UpdateStatus").disabled = true;
+            },
+            error: function (error) {
+                console.error("Error in AJAX request:", error);
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+
+        // var fileIsNull = @((Model.SiteMaster != null).ToString().ToLower());
+        // if (fileIsNull) {
+        //     $("#CompName").prop("disabled", true);
+        //     $("#sitecode").prop("disabled", true);
+        //     $("#sitename").prop("disabled", true);
+        //     $("#stdate").prop("disabled", true);
+        //     $("#sitegstin").prop("disabled", true);
+        //     $("#bankchq").prop("disabled", true);
+        //}
+
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/_SiteAddressMst",
+            data: {},
+            cache: false,
+            success: function (data) {
+                $("#renderPartialAddView").html(data);
+            },
+        });
+
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/_SiteEmailMst",
+            data: {},
+            cache: false,
+            success: function (data) {
+                $("#renderemail").html(data);
+            },
+        });
+
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/_SiteStoreMst",
+            data: {},
+            cache: false,
+            success: function (data) {
+                $("#renderstore").html(data);
+            },
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/_SiteStatusMst",
+            data: {},
+            cache: false,
+            success: function (data) {
+                $("#renderstatus").html(data);
+            },
+        });
+    });
+</script>
+

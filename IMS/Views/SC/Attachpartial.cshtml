@@ -1,0 +1,83 @@
+﻿@model IEnumerable<IMS_Model.SC.SCCreation.AttachDtl>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<table id="tblAddAtth" class="table-bordered table-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AttachDocName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FileName)
+            </th>
+            <th style="width:10%;">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ToList())
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AttachDocName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileName)
+                </td>
+                <td>
+                    <a href="@Url.Action("View", "SC", new {SRNO = item.SrNo , Attachid = item.AttId })" target="_blank"><i class="fa fa-eye"></i></a>
+                    &nbsp; &nbsp;
+                    <a href="#" class="AttachUpdate" data-selected="@item.AttachDocName" data-srno="@item.SrNo" data-attachid="@item.AttId"><i class="fa fa-edit"></i></a>
+                    &nbsp; &nbsp;
+                    <a href="#" class="AttachDelete" data-selected="@item.FileName" data-srno="@item.SrNo" data-attachid="@item.AttId">Delete</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        new DataTable('#tblAddAtth');
+    });
+
+    $(".AttachUpdate").click(function () {
+
+        var srno = $(this).data("srno");
+        var FileName = $(this).data("selected");
+        var AttachID = $(this).data("attachid");
+        debugger
+        $("#Srnotext").val(srno);
+        $("#FileNametext :selected").text(FileName);
+        $("#AttachIDtext").val(AttachID);
+
+        document.getElementById("AdduploadButton").disabled = true;
+        document.getElementById("UpdateAttachButton").disabled = false;
+    });
+
+
+    $(".AttachDelete").click(function () {
+
+        var srno = $(this).data("srno");
+        var attachid = $(this).data("attachid")
+
+        $.ajax({
+            type: 'POST',
+            url: '/SC/AttachDelete',
+            data: { SRNO: srno, Attachid: attachid },
+            success: function (result) {
+                $('#AttachPartial').html(result);
+            }
+        });
+    });
+</script>
+
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

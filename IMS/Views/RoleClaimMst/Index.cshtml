@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+            if (successMessage !== "") {
+                alert(successMessage);
+            } else if (errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="containers-style">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5>Role Claim Master List</h5>
+                    </div>
+                    <div class="col-md-9 text-right">
+                        <a type="button" class="btn btn-secondary custombtn" asp-action="IMSSetting" asp-controller="Login" title="IMS Setting"><i class="fa fa-gear"></i></a>
+                        <a href="@Url.Action("RoleClaimCreation")" class="btn btn-success custombtn btnAdd" title="Add">
+                            <i class="fa fa-plus"></i>
+                        </a>
+
+                        <button type="button" class="btn btn-outline-secondary custombtn" onclick="location.reload();" title="Clear Data">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div id="PartialRoleClaimMstLst" class="col-md-12"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        ButtonsRight();
+        GetRoleClaimMstList();
+    });
+
+    function GetRoleClaimMstList() {
+
+        $.ajax({
+            type: 'POST',
+            url: '../RoleClaimMst/_RoleClaimMstList',
+            data: {},
+            cache: false,
+            success: function (data) {
+                $('#PartialRoleClaimMstLst').html(data);
+            },
+        });
+    }
+</script>
+

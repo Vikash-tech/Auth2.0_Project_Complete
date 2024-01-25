@@ -1,0 +1,110 @@
+﻿@model IEnumerable<IMS_Model.SC.SCCreation.SCProfileWODtl>
+
+<table id="tblExperience" class="table-bordered table-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Project Site
+            </th>
+            <th>
+                Project Name
+            </th>
+            <th>
+                Project Client
+            </th>
+            <th>
+                 States
+            </th>
+            <th>
+                 WOValue
+            </th>
+            <th>
+                WO Description
+            </th>
+            <th style="width:10%;">
+                Action
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ToList())
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjSite)
+                </td>                            
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjClient)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.States)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WOValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WODesc)
+                </td>
+                <td>
+                    <a href="#" class="Expersc" data-projsite="@item.ProjSite" data-woid="@item.SCProfWOId"
+                       data-pname="@item.ProjName" data-projclient="@item.ProjClient" data-state="@item.States"
+                       data-wovaluve="@item.WOValue" data-wodesc="@item.WODesc" data-srno="@item.SrNo"><i class="fa fa-edit"></i></a>
+                    &nbsp; &nbsp;
+                    <a href="#" class="ExperiDelete" data-srno="@item.SrNo" data-woid="@item.SCProfWOId"><i class="fa fa-eraser"></i></a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    //for Query table
+    $(document).ready(function () {
+        new DataTable("#tblExperience");
+    });
+
+    //Send data into Textbox
+    $(".Expersc").click(function () {
+
+        var exptx = $(this).data("srno");
+        var prowoid = $(this).data("woid");
+        var site = $(this).data("projsite");
+        var pname = $(this).data("pname");
+        var client = $(this).data("projclient");
+        var state = $(this).data("state");
+        var value = $(this).data("wovaluve");
+        var desc = $(this).data("wodesc");
+
+        $("#txtexpsrno").val(exptx);
+        $("#txtwoid").val(prowoid);
+        $("#site").val(site);
+        $("#projname").val(pname);
+        $("#client").val(client);
+        $("#state").val(state);
+        $("#wovalue").val(value);
+        $("#wodesc").val(desc);
+
+        //for Enable and Disable
+        document.getElementById("expadd").disabled = true;
+        document.getElementById("Experienceupdate").disabled = false;
+    });
+
+    $(".ExperiDelete").click(function () {
+        var exptx = $(this).data("srno");
+        var prowoid = $(this).data("woid");
+
+        $.ajax({
+            type: 'POST',
+            url: '/SC/ExperiDelete',
+            data: { SRNO: exptx, SCExperiId: prowoid },
+            success: function (result) {
+                $('#PartialExp').html(result);
+            }
+        });
+    });
+</script>

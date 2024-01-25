@@ -1,0 +1,91 @@
+﻿@model IEnumerable<IMS_Model.SC.SCCreation.SCEquipDtl>
+
+
+<table id="tblEquipment" class="table-bordered table-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Equipment Desc
+            </th>
+            <th>
+                Equipment Make
+            </th>
+            <th>
+                Equipment Model
+            </th>
+            <th>
+                Equipment No
+            </th>
+            <th style="width:10%;">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ToList())
+        {
+            <tr>             
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScEquipDesc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScEquipMake)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScEquipModel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScEquipNo)
+                </td>
+                <td>
+                    <a href="#" class="equipsc" onclick="Editequipment();" data-equid="@item.SCEquipId" data-temid="@item.ScTmpId" data-screg="@item.ScRegnNo" data-equipdes="@item.ScEquipDesc"
+                       data-equipmake="@item.ScEquipMake" data-equipmodal="@item.ScEquipModel" data-equipno="@item.ScEquipNo" data-srno="@item.SrNo"><i class="fa fa-edit"></i></a>
+                    &nbsp; &nbsp;
+                    <a href="#" class="EQUIPDelete" data-srno="@item.SrNo" data-equid="@item.SCEquipId"><i class="fa fa-eraser"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        new DataTable("#tblEquipment");
+    });
+
+
+    $(".equipsc").click(function () {
+
+        var Eqipid = $(this).data("equid");
+        var srno = $(this).data("srno");
+        var des = $(this).data("equipdes");
+        var make = $(this).data("equipmake");
+        var modal = $(this).data("equipmodal");
+        var quip = $(this).data("equipno");
+
+        $("#textequiid").val(Eqipid);
+        $("#textequisrno").val(srno);
+        $("#equipdesc").val(des);
+        $("#make").val(make);
+        $("#model").val(modal);
+        $("#number").val(quip);
+
+
+        document.getElementById("equiadd").disabled = true;
+        document.getElementById("equipUpdate").disabled = false;
+    });
+
+    $(".EQUIPDelete").click(function () {
+        var Eqipid = $(this).data("equid");
+        var srno = $(this).data("srno");
+
+        $.ajax({
+            type: 'POST',
+            url: '/SC/EquipDelete',
+            data: { SRNO: srno, SCEquipId: Eqipid },
+            success: function (result) {
+                $('#PartialEquipment').html(result);
+            }
+        });
+    });
+</script>
+

@@ -1,0 +1,122 @@
+﻿@model IEnumerable<IMS_Model.SC.SCCreation.SCAddress>
+
+<table id="tblAddressMst" class="table-bordered tabletable-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Address 1
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                PinCode
+            </th>
+            <th>
+                Mobile No
+            </th>
+
+            <th>
+                Contact Person
+            </th>
+            <th>
+                Email Address
+            </th>
+            <th style="width:10%;">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ToList())
+        {
+            <tr>
+                <td id="scadd">
+                    @Html.DisplayFor(modelItem => item.SCAdd1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pincode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CntPerson)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailId)
+                </td>
+                <td>
+                    <a href="#" class="Edit" data-srno="@item.SRNO" data-addid="@item.SCAddressId" data-add1="@item.SCAdd1" data-cyt="@item.SCAdd2" data-adgrd3="@item.SCAdd3"
+                       data-city="@item.City" data-country="@item.Country" data-ppincode="@item.Pincode" data-phoneno="@item.PhoneNo"
+                       data-faxno="@item.FaxNo" data-cntperson="@item.CntPerson"
+                       data-desiganation="@item.Desiganation" data-mobileeno="@item.MobileNo" data-emailid="@item.EmailId"><i class="fa fa-edit"></i></a>
+                    &nbsp; &nbsp;
+                    <a href="#" class="AddDelete" data-srno="@item.SRNO" data-addid="@item.SCAddressId"><i class="fa fa-eraser"></i></a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        new DataTable("#tblAddressMst");
+    });
+
+    //Send data into Textbox
+    $(".Edit").click(function () {
+        var srno = $(this).data("srno");
+        var addid = $(this).data("addid");
+        var add1 = $(this).data("add1");
+        var add2 = $(this).data("cyt");
+        var add3 = $(this).data("adgrd3");
+        var city = $(this).data("city");
+        var pincode = $(this).data("ppincode");
+        var phone = $(this).data("phoneno");
+
+        var fax = $(this).data("faxno");
+        var cntper = $(this).data("cntperson");
+        var desg = $(this).data("desiganation");
+        var mobile = $(this).data("mobileeno");
+        var email = $(this).data("emailid");
+
+        $("#txtsrno").val(srno);
+        $("#Address1").val(add1);
+        $('#txtaddid').val(addid);
+        $("#Address2").val(add2);
+        $("#Address3").val(add3);
+        $("#City").val(city);
+        $("#Pincode").val(pincode);
+        $("#Phone").val(phone);
+        $("#fax").val(fax);
+        $("#contper").val(cntper);
+        $("#designat").val(desg);
+        $("#mobile").val(mobile);
+        $("#emails").val(email);
+
+        document.getElementById("AddressADD").disabled = true;
+        document.getElementById("Addressupdate").disabled = false;
+    });
+
+    $(".AddDelete").click(function () {
+        var srno = $(this).data("srno");
+        var addid = $(this).data("addid");
+        if (@Model.ToList().Count != 1) {
+            $.ajax({
+                type: 'POST',
+                url: '/SC/AddressDelete',
+                data: { SRNO: srno, SCAddressId: addid },
+                success: function (result) {
+                    $('#address').html(result);
+                }
+            });
+        } else {
+            alert("YOU CAN NOT DELETE LAST ADDRESS. If needed, please update it.");
+        }
+    });
+</script>

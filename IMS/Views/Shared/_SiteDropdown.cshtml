@@ -1,0 +1,15 @@
+﻿@if (ViewBag.ddl != null)
+{
+    @foreach (var item in ViewBag.ddl)
+    {
+        if (ViewBag.SelectedId == @item.Value)
+        {
+            <option value="@item.Value" selected>@item.Text </option>
+        }
+        else
+        {
+            <option value="@item.Value">@item.Text </option>
+        }
+    }
+}
+

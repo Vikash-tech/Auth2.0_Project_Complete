@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+            if (successMessage !== "") {
+                alert(successMessage);
+            } else if (errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+    </script>
+</head>
+<body>
+    <form method="get">
+        <div class="containers-style">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Role Master List</h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+
+                            @Html.ActionLink("", "RoleMasterCreation", new { Add ="Add" } ,new { @class = "btn btn-success custombtn btnAdd fa fa-plus"})
+                            <button type="button" class="btn btn-outline-secondary custombtn" onclick="location.reload();" title="Clear Data">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div id="PartialRoleMstLst" class="col-md-12"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        var btnAccvalu = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.btnAccControl))');
+        ButtonsRights(btnAccvalu);
+        GetRoleMstList();
+    });
+    function GetRoleMstList() {
+
+        $.ajax({
+            type: 'POST',
+            url: '../RoleMstSetting/_RoleMstList',
+            data: {},
+            cache: false,
+            success: function (data) {
+                $('#PartialRoleMstLst').html(data);
+            },
+        });
+    }
+</script>

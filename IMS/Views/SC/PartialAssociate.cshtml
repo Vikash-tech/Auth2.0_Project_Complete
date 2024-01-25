@@ -1,0 +1,70 @@
+﻿@model IEnumerable<IMS_Model.SC.SCCreation.SCAssComp>
+
+
+<table id="tblAssoComp" class="table-bordered table-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Associate Company Name
+            </th>
+            <th style="width:contain">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ToList())
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssCompName)
+                </td>
+                <td>
+                    <a href="#" class="EditAsso" data-assid="@item.SCAssCmpId" data-tmpid="@item.ScTmpId" data-regnid="@item.ScRegnNo"
+                       data-srno="@item.SrNo" data-assocompy="@item.AssCompName"><i class="fa fa-edit"></i></a>
+                    &nbsp; &nbsp;
+                    <a href="#" class="AssoDelete" data-srno="@item.SrNo" data-assid="@item.SCAssCmpId"><i class="fa fa-eraser"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    //for Query table
+    $(document).ready(function () {
+        new DataTable("#tblAssoComp");
+    });
+
+    //Send data into Textbox
+    $(".EditAsso").click(function () {
+
+        var compy = $(this).data("assocompy");
+        var Assid = $(this).data("assid");
+        var srno = $(this).data("srno");
+
+        $("#assoname").val(compy);
+        $("#txtassSrno").val(srno);
+        $("#txtcmpid").val(Assid);
+
+
+        //for Enable and Disable
+        document.getElementById("assoadd").disabled = true;
+        document.getElementById("AssoUpdate").disabled = false;
+
+    });
+
+    $(".AssoDelete").click(function () {
+        var Assid = $(this).data("assid");
+        var srno = $(this).data("srno");
+
+        $.ajax({
+            type: 'POST',
+            url: '/SC/AssoDelete',
+            data: { SRNO: srno, SCAssoId: Assid },
+            success: function (result) {
+                $('#PartialAssoci').html(result);
+            }
+        });
+    });
+</script>

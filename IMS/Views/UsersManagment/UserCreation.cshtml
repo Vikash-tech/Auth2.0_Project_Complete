@@ -1,0 +1,411 @@
+﻿@model IMS_Model.CommonDropDown.ViewModel.UserVm
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+            if (successMessage != "" && successMessage != null) {
+                alert(successMessage);
+            } else if (errorMessage !== "" && errorMessage != null) {
+                alert(errorMessage);
+            }
+        });
+    </script>
+    <style>
+        #tblClaimsAssign {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            #tblClaimsAssign th,
+            #tblClaimsAssign td {
+                text-align: center;
+                padding: 8px;
+                border: 1px solid #ddd;
+            }
+
+                #tblClaimsAssign th:first-child,
+                #tblClaimsAssign td:first-child {
+                    text-align: left;
+                }
+
+            #tblClaimsAssign th {
+                font-size: 12px;
+                background-color: #1c78bf;
+                color: white;
+                height: 5px;
+            }
+
+            #tblClaimsAssign input[type="checkbox"] {
+                margin-left: 5px;
+            }
+
+
+        .firstrow {
+            margin-top: -15px;
+        }
+
+        #tblContainer {
+            position: relative;
+            overflow: scroll;
+            height: 500px;
+        }
+
+        #tblSiteAssign {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            #tblSiteAssign th,
+            #tblSiteAssign td {
+                text-align: center;
+                padding: 8px;
+                border: 1px solid #ddd;
+            }
+
+                #tblSiteAssign th:first-child,
+                #tblSiteAssign td:first-child {
+                    text-align: left;
+                }
+
+            #tblSiteAssign th {
+                font-size: 12px;
+                background-color: #1c78bf;
+                color: white;
+                height: 5px;
+            }
+
+            #tblSiteAssign input[type="checkbox"] {
+                margin-left: 5px;
+            }
+
+        #tblheader {
+            position: sticky;
+            top: 0;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        input[type="checkbox"]:hover {
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+        <form method="post" asp-action="UserCreation">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>User Master Creation </h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+                            <a type="button" class="btn btn-outline-dark custombtn" asp-controller="UsersManagment" asp-action="Index" title="Back"><i class="fa fa-backward"></i></a>
+                            @if (Model.UserMst != null)
+                            {
+                                @if (Model.UserMst.AddedBy != null)
+                                {
+                                    <button type="submit" id="btnUpdate" class="btn btn-primary custombtn" title="Update"><i class="fa fa-random"></i></button>
+                                }
+                                else
+                                {
+                                    <button type="submit" id="btnSave" class="btn btn-success custombtn" title="Save"><i class="fa fa-save"></i></button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" id="btnSave" class="btn btn-success custombtn" title="Save"><i class="fa fa-save"></i></button>
+                            }
+                            <button type="button" class="btn btn-outline-secondary custombtn" onclick="location.reload();" title="Clear Data">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row firstrow">
+                        @if (Model.UserMst != null)
+                        {
+                            <input asp-for="UserMst.Id" hidden type="text" class="form-control" />
+                            <input asp-for="UserMst.AddedBy" hidden type="text" class="form-control" />
+                        }
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="UserMst.UsrCode" class="control-label"></label>
+                                @if (Model.UserMst != null)
+                                {
+                                    <input asp-for="UserMst.UsrCode" readonly type="text" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input asp-for="UserMst.UsrCode" type="text" class="form-control" />
+                                }
+                                <span asp-validation-for="UserMst.UsrCode" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="UserMst.UsrFN" class="control-label"></label>
+                                <input asp-for="UserMst.UsrFN" type="text" class="form-control" />
+                                <span asp-validation-for="UserMst.UsrFN" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="UserMst.UsrLN" class="control-label"></label>
+                                <input asp-for="UserMst.UsrLN" type="text" class="form-control" />
+                                <span asp-validation-for="UserMst.UsrLN" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-3 col-sm-3">
+                            <span>
+                                <label asp-for="UserMst.Email" class="control-label"></label>
+                                <input asp-for="UserMst.Email" type="text" class="form-control" />
+                                <span asp-validation-for="UserMst.Email" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label asp-for="UserMst.PhoneNumber" class="control-label"></label>
+                                <input asp-for="UserMst.PhoneNumber" type="tel" class="form-control" />
+                                <span asp-validation-for="UserMst.PhoneNumber" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-1 col-sm-1">
+                            <span>
+                                <label asp-for="UserMst.HOUser" class="control-label"></label>
+                                <select asp-for="UserMst.HOUser" asp-items="@Model.AddYesNo" class="form-control">
+                                    <option value="-1">--Select--</option>
+                                </select>
+                                <span asp-validation-for="UserMst.HOUser" class="text-danger"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="tabset" style="margin-top:15px;">
+                        <!-- Tab 1 -->
+                        <input type="radio" name="tabset" id="tab1" aria-controls="basic" checked>
+                        <label for="tab1">
+                            Site Assignment
+                        </label>
+                        <!-- Tab 2 -->
+                        <input type="radio" name="tabset" id="tab2" aria-controls="spauthorization">
+                        <label for="tab2">
+                            Special Authorization
+                        </label>
+
+                        <div class="tab-panels">
+                            <div id="basic" class="tab-panel">
+                                <div class="row" style="margin-top:-10px;">
+
+                                    <div class="col-md-12 col-sm-12">
+                                        <input type="text" id="searchBox" placeholder="Site Search...">
+                                        <br />  <br />
+                                        <div id="tblContainer">
+                                            <table id="tblSiteAssign" class="table table-bordered table-responsive-md">
+                                                <thead id="tblheader">
+                                                    <tr>
+                                                        <th hidden>Site Id</th>
+                                                        <th style="text-align:start;">Site Name</th>
+                                                        @foreach (var role in Model.roleMasters)
+                                                        {
+                                                            <th>@role.NormalizedName</th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tblbody">
+                                                    @for (var i = 0; i < Model.siteMasters.Count; i++)
+                                                    {
+                                                        var siteid = Model.siteMasters[i].SiteId;
+                                                        var sitetext = Model.siteMasters[i].StName;
+                                                        <tr>
+                                                            <td hidden>@siteid</td>
+                                                            <td style="text-align:start;">@sitetext</td>
+                                                            @foreach (var role in Model.roleMasters)
+                                                            {
+                                                                bool isChecked;
+                                                                @if (Model.imsUsrRoles != null)
+                                                                {
+                                                                    isChecked = Model.imsUsrRoles.Any(sc => sc.SiteId == siteid && sc.RoleId == role.Id.ToString());
+                                                                }
+                                                                else
+                                                                {
+                                                                    isChecked = false;
+                                                                }
+                                                                <td>
+                                                                    <input type="checkbox" name="@siteid-@role.Id-true" value="true" @(isChecked ? "checked" : "") />
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="spauthorization" class="tab-panel">
+                                <div class="row" style="margin-top:-10px;">
+                                    <div class="col-md-12 col-sm-12">
+                                        <input type="text" id="searchclaimBox" placeholder="Menu Search...">
+                                        <br />    <br />
+                                        <div id="tblContainer">
+                                            <table id="tblClaimsAssign" class="table table-bordered table-responsive-md">
+                                                <thead id="tblheader">
+                                                    <tr>
+                                                        <th hidden>Menu Id</th>
+                                                        <th style="text-align:start;">Menu Name</th>
+                                                        @foreach (var claim in Model.IMSClaims)
+                                                        {
+                                                            <th>@claim.ClaimType</th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tblbody">
+                                                    @for (var i = 0; i < Model.TMenuMsts.Count; i++)
+                                                    {
+                                                        var menuId = Model.TMenuMsts[i].MenuId;
+                                                        var menuTxt = Model.TMenuMsts[i].MenuTxt;
+                                                        <tr>
+                                                            <td hidden>@menuId</td>
+                                                            <td style="text-align:start;">@menuTxt</td>
+                                                            @foreach (var claim in Model.IMSClaims)
+                                                            {
+                                                                bool isChecked;
+                                                                @if (Model.imsUserClaims != null)
+                                                                {
+                                                                    isChecked = Model.imsUserClaims.Any(sc => sc.MenuId == menuId && sc.ClaimType == claim.ClaimType);
+                                                                }
+                                                                else
+                                                                {
+                                                                    isChecked = false;
+                                                                }
+                                                                <td>
+                                                                    <input type="checkbox" name="@menuId-@claim.ClaimType-@claim.ClaimValue-true" value="true" @(isChecked ? "checked" : "") />
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+
+<script>
+    $(document).ready(function () {
+        ButtonsRight();
+    });
+
+
+    // window.onscroll = function () { myFunction() };
+
+    // var header = document.getElementById("tblheader");
+    // var body = document.getElementById("tblbody");
+    // var sticky = header.offsetTop;
+
+    // function myFunction() {
+    //     if (window.pageYOffset > sticky) {
+    //         header.classList.add("sticky");
+    //     } else {
+    //         header.classList.remove("sticky");
+    //     }
+    // }
+
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+
+        input = document.getElementById("searchBox");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblSiteAssign");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    document.getElementById("searchBox").addEventListener("input", searchTable);
+
+</script>
+
+<script>
+    // window.onscroll = function () { myFunction() };
+
+    // var header = document.getElementById("tblheader");
+    // var body = document.getElementById("tblbody");
+    // var sticky = header.offsetTop;
+
+    // function myFunction() {
+    //     if (window.pageYOffset > sticky) {
+    //         header.classList.add("sticky");
+    //     } else {
+    //         header.classList.remove("sticky");
+    //     }
+    // }
+
+    function searchclaimTable() {
+        var input, filter, table, tr, td, i, txtValue;
+
+        input = document.getElementById("searchclaimBox");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblClaimsAssign");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    document.getElementById("searchclaimBox").addEventListener("input", searchclaimTable);
+</script>
+

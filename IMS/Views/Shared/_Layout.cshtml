@@ -1,0 +1,391 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]IMS</title>
+    <link rel="shortcut icon" href="~/Bicpl_logo.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/IMS.styles.css" asp-append-version="true" />
+
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <!-- Include DataTables and DataTables Buttons -->
+    <link href="~/css/jquerydatatable/jquery.datatables.min.css" rel="stylesheet" />
+    <link href="~/css/jquerydatatable/buttons.datatables.min.css" rel="stylesheet" />
+
+    <script src="~/js/jquerydatatable/jquery-3.7.0.js"></script>
+    <script src="~/js/jquerydatatable/jquery.datatables.min.js"></script>
+    <script src="~/js/jquerydatatable/datatables.buttons.min.js"></script>
+    <script src="~/js/jquerydatatable/jszip.min.js"></script>
+    <script src="~/js/jquerydatatable/pdfmake.min.js"></script>
+    <script src="~/js/jquerydatatable/vfs_fonts.js"></script>
+    <script src="~/js/jquerydatatable/buttons.html5.min.js"></script>
+    <script src="~/js/jquerydatatable/buttons.print.min.js"></script>
+    <script src="~/js/jquerydatatable/buttons.colvis.min.js"></script>
+
+    <script src="~/js/sweetalert.js"></script>
+
+
+
+    <style>
+        label {
+            color: black;
+        }
+/* 
+        .ImsSetting,
+        .btnAdd,
+        .btnUpdate,
+        .btnCancel,
+        .btnApprove,
+        .btnRead,
+        .btnPMVerify 
+        {
+            visibility: hidden;
+        }
+ */
+
+        .ImsSetting,
+        .btnAdd,
+        .btnUpdate,
+        .btnCancel,
+        .btnApprove,
+        .btnRead,
+        .btnPMVerify {
+            display: none; /* Initially hide all buttons */
+        }
+
+        #user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+            #user-profile img {
+                border-radius: 50%;
+                margin-right: 8px;
+            }
+
+
+
+        .navbars {
+            height: 50px;
+        }
+
+        .navbars {
+            height: 40px;
+        }
+
+        @@media (max-width: 1000px) {
+            .navbars,
+            .navbar {
+                height: auto;
+            }
+
+            body,
+            #HeaderTitle {
+                font-size: 12px;
+            }
+        }
+
+        footer {
+            background-color: whitesmoke;
+            border-top: 1px solid #ddd;
+            text-align: end;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #Sitelist {
+            color: black;
+            font-weight: bold;
+            background-color: aliceblue;
+            border: none;
+        }
+
+        #ProfileMenuSection {
+            margin-top: -10px;
+            margin-bottom: -10px;
+        }
+
+        #HeaderTitle {
+            text-align: center;
+        }
+
+        .spacebtw {
+            padding-left: 2px;
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dropdown-menu.show {
+            display: flex;
+        }
+
+        /*  .dropdown-menu li:first-child a {
+                                                                                                    font-weight: bold;
+                                                                                                    font-size: 1.2em;
+                                                                                                    text-transform: uppercase;
+                                                                                                    color: #516beb;
+                                                                                                } */
+
+        .dropdown-menu li .dropdown-item {
+            color: gray;
+            font-size: 1em;
+            padding: 0.5em 1em;
+        }
+
+        .dropdown-menu {
+            border: none;
+            border-radius: 0;
+            padding: 0.7em;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        }
+
+        @@media only screen and (min-width: 992px) {
+            .dropdown:hover .dropdown-menu {
+                display: flex;
+            }
+
+            .dropdown-menu.show {
+                display: flex;
+            }
+        }
+
+        .navbar-dark .navbar-nav a.nav-link {
+            color: #ffffff;
+            font-size: 1.1em;
+        }
+
+        @@media only screen and (max-width: 992px) {
+            .dropdown:hover .dropdown-menu {
+                max-height: 350px;
+                overflow-y: scroll;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .containers-style {
+                width: 100%;
+                height: 100%;
+                overflow-x: scroll;
+                overflow-y: scroll;
+                position: relative;
+            }
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 80px;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 85%;
+            height: 80%;
+            overflow-y: scroll;
+            overflow-x: scroll;
+        }
+
+        /* The Close Button */
+        .close {
+            color: red;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: end;
+            margin-top: -20px;
+        }
+
+            .close:hover, .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+
+    </style>
+</head>
+<body style="background-color: #f8f8f8;">
+    <header>
+        <section class="navbar navbar-expand-md navbar-light bg-white" id="ProfileMenuSection">
+            <div class="container-fluid">
+
+                @{
+                    byte[] logo = @HttpContextAccessor.HttpContext.Session.Get("Logo");
+                }
+
+                <a class="navbar-brand" asp-action="DashBoard" asp-controller="Login" id="LogoID">
+                    <img src="data:image/ico;base64,@Convert.ToBase64String(logo)" alt="LogoPreview" style="height:70px; width:70px;" />
+                </a>
+
+                <h4 id="HeaderTitle" class="nav-link">
+                    <b> Information Management System</b>
+                </h4>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse1"
+                        aria-controls="navbarCollapse1" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="fa fa-home"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarCollapse1">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <form class="form-inline">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                            </form>
+                        </li>
+                        <li class="nav-item spacebtw">
+                            <select name="SiteId" class="nav-link" id="Sitelist" onchange="GetDashboard();" onselect="this.Value">
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" title="Notification">
+                                <i class="fa-solid fa-bell"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" title="Help">
+                                <i class="fa-solid fa-headset"></i>
+                            </a>
+                        </li>
+                        <li id="profileSection" class="dropdown notification-list">
+                            <a class="nav-link nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="true">
+                                <img src="~/image/userprofileimg.jpg" width="30" height="30" alt="user-image" class="rounded-circle" title="Profile">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right profile-dropdown" x-placement="top-end">
+                                <div class="dropdown-header noti-title">
+                                    <h6 class="text-overflow m-0">
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <span>Welcome !</span>
+                                            <span class="text-success font-weight-bold p-2">@User.Identity.Name.ToUpper()</span>
+                                        }
+                                    </h6>
+                                </div>
+                                <a asp-action="LogOut" asp-controller="Login" class="dropdown-item notify-item">
+                                    <i class="mdi mdi-logout-variant"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </div>
+                        </li>
+                        @{
+                            var isiteId = @HttpContextAccessor.HttpContext.Session.GetInt32("SiteId").ToString();
+                        }
+                        @if (isiteId == "16")
+                        {
+                            <li class="nav-item ImsSetting">
+                                <div id="PartialSettingMenu"></div>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="card">
+            <section class="menu" style="background-color: aliceblue;">
+                <nav class="navbar navbar-expand-md navbar-light navbars">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <div id="PartialIMSmenu"></div>
+                        </div>
+                    </div>
+                </nav>
+            </section>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2023 - IMS - <a href="/privacy">Privacy</a>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    <script src="~/js/bootstrap.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
+<script>
+    function GetDashboard() {
+        var siteid = $("#Sitelist").val();
+
+        $.ajax({
+            url: '../Login/SetSiteDropdownId',
+            type: 'Get',
+            data: { isiteid: siteid },
+            success: function (data) {
+                window.location.href = "../Login/DashBoard";
+            }
+        });
+
+    }
+
+    $(document).ready(function () {
+        var ddlSitedropdown = $("#Sitelist");
+
+        $.ajax({
+            type: "GET",
+            url: "../Login/dropdown",
+            success: function (data) {
+                $(ddlSitedropdown).empty();
+                $(ddlSitedropdown).append(data);
+
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "../Common/_MenuList",
+            success: function (data) {
+                $("#PartialIMSmenu").html(data);
+            },
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "../Common/_SettingMenuList",
+            success: function (data) {
+                $("#PartialSettingMenu").html(data);
+            },
+        });
+    });
+</script>

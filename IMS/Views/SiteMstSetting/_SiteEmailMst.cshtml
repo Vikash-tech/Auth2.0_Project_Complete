@@ -1,0 +1,84 @@
+﻿  @model IMS_Model.CommonDropDown.ViewModel.SiteMst_vm
+
+
+<table id="tblSiteEmailMst" class="table-bordered tabletable-responsive-md" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Email Id
+            </th>
+            <th>
+                Person Name
+            </th>
+            <th>
+                Mobile Number
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.siteEmailMst.ToList())
+        { 
+            @if (item.ActStatus == true)
+            {     
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmailId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PersonName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MobileNo)
+                    </td>
+                    <td>
+                        <a href="#" class="AddSiteEdit" data-addsrno="@item.Srno" data-eid="@item.SeId" data-emailtype="@item.EmailType" data-emailid="@item.EmailId" data-personame="@item.PersonName" data-mobile="@item.MobileNo"><i class="fa fa-edit"></i></a>
+                        &nbsp; &nbsp;
+                        <a href="#" class="SiteEmailDelete"  data-addsrno="@item.Srno" data-eid="@item.SeId"><i class="fa fa-eraser"></i></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        new DataTable("#tblSiteEmailMst");
+    });
+
+    $(".AddSiteEdit").click(function () {
+
+        var emailsrno = $(this).data("addsrno");
+        var emailid = $(this).data("eid");
+        var emailtyp = $(this).data("emailtype");
+        var emailadd = $(this).data("emailid");
+        var pname = $(this).data("personame");
+        var mobile = $(this).data("mobile");
+
+        $("#emailsrno").val(emailsrno);
+        $("#emailid").val(emailid);
+        $("#emailTypeSelect").val(emailtyp);
+        $("#emailAddressInput").val(emailadd);
+        $("#personNameInput").val(pname);
+        $("#mobileNumberInput").val(mobile);
+
+        document.getElementById("Addemail").disabled = true;
+        document.getElementById("Updateemail").disabled = false;
+    });
+
+    $(".SiteEmailDelete").click(function () {
+
+        var emailsrno = $(this).data("addsrno");
+        var emailid = $(this).data("eid");
+
+        $.ajax({
+            type: "GET",
+            url: "../SiteMstSetting/SiteEmailDelete",
+            data: { AddSrNo: emailsrno, EmailId: emailid },
+            cache: false,
+            success: function (data) {
+                $("#renderemail").html(data);
+            },
+        });
+    });
+</script>

@@ -1,0 +1,173 @@
+﻿@model IMS_Model.CommonModel.CompConfg
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+
+            if (successMessage !== "") {
+                alert(successMessage);
+            } else if (errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+    </script>
+    <style>
+        .firstrow {
+            margin-top: -15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="containers-style">
+        <br />
+        <form method="post" enctype="multipart/form-data">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>Company Configuraton Creation </h5>
+                        </div>
+                        <div class="col-md-9 text-right">
+                            @* for buttons *@
+                            <a type="button" class="btn btn-outline-dark custombtn" asp-controller="CompConfg" asp-action="Index" title="Back"><i class="fa fa-backward"></i></a>
+                            @if (Model != null)
+                            {
+                                @if (Model.ConfgId > 0)
+                                {
+                                    <button type="submit" class="btn btn-outline-primary custombtn" asp-action="Edit" title="Update"><i class="fa fa-random"></i></button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-success custombtn" asp-action="CompConfgCreation" title="Save"><i class="fa fa-save"></i></button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success custombtn" asp-action="CompConfgCreation" title="Save"><i class="fa fa-save"></i></button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row firstrow">
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label class="control-label">Company Name</label>
+                                <select asp-for="CompId" class="form-control custom-select">
+                                    <option value="-1">--Select--</option>
+                                    @foreach (var item in ViewBag.CompMstddl)
+                                    {
+                                        <option value="@item.CompId">@item.CompName</option>
+                                    }
+
+                                </select>
+                                @* <input asp-for="CompId" class="form-control" /> *@
+                                <span asp-validation-for="CompId" class="text-danger"></span>
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label class="control-label">Finance Start Date</label>
+                                <input asp-for="FinStYr" class="form-control" />
+                                <span asp-validation-for="FinStYr" class="text-danger"></span>
+                            </span>
+                        </div>
+                        @if (Model != null)
+                        {
+                            <input type="hidden" asp-for="ConfgId" class="form-control" />
+                        }
+                        <div class="col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Finance End Date</label>
+                                <input asp-for="FinEdYr" class="form-control" />
+                                <span asp-validation-for="FinEdYr" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label class="control-label">Date Format</label>
+                                <input asp-for="DtFormat" class="form-control" />
+                                <span asp-validation-for="DtFormat" class="text-danger"></span>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label class="control-label">Time Format</label>
+                                <input asp-for="TimeFormat" class="form-control" />
+                                <span asp-validation-for="TimeFormat" class="text-danger"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label class="control-label">Number Format</label>
+                                <input asp-for="NumFormat" class="form-control" />
+                                <span asp-validation-for="NumFormat" class="text-danger"></span>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                <label class="control-label">Currency Format</label>
+                                <input asp-for="CurrFormat" class="form-control" />
+                                <span asp-validation-for="CurrFormat" class="text-danger"></span>
+                            </span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <span>
+                                <label class="control-label">Logo (In .Jpeg)</label>
+                                <input type="file" id="logoFileInput" asp-for="LogoFile" class="form-control" />
+                                <span asp-validation-for="LogoFile" class="text-danger"></span>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span>
+                                Active Status
+                                <br />
+                                <input asp-for="ActStatus" type="checkbox" />
+                                &nbsp;
+                                Active Status
+                                <span asp-validation-for="ActStatus" class="text-danger"></span>
+                            </span>
+                        </div>
+                        @if (Model != null)
+                        {
+                            @if (Model.Logo != null)
+                            {
+                                <img id="logoPreview" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Logo)" alt="Logo" style="height:90px; width:100px;">
+
+                            }
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+
+@* 
+<script>
+    $(document).ready(function () {
+        var s, d, a = "1";
+        ButtonsRight(s,d,a);
+        var id = '@ViewBag.Id';
+        if (id != '' && id != null) {
+            ButtonsRight(s, d, a);
+            alert();
+        }
+      
+    });
+</script> *@

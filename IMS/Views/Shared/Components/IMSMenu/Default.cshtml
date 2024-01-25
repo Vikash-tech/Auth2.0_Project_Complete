@@ -1,0 +1,71 @@
+﻿ @model IEnumerable<MenuItem>
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        @foreach (var item in Model)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_@item.MenuId" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:black;">
+                    <i class="@item.ImgUrl"></i>
+                    @item.MenuTxt
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown_@item.MenuId">
+                    @if (item.Children != null && item.Children.Count > 0)
+                    {
+                        @foreach (var child in item.Children)
+                        {
+                            <ul>
+                                <li><a class="dropdown-item" href="@child.MenuUrl" style="font-size:small;">@child.MenuTxt</a></li>
+                                @if (child.Children != null && child.Children.Count > 0)
+                                {
+                                    @foreach (var subchild in child.Children)
+                                    {
+                                        <li><a class="dropdown-item submenu" href="@subchild.MenuUrl" style="font-size:12px;margin-bottom:-8px;color:black;">@subchild.MenuTxt</a></li>
+                                    }
+                                }
+                            </ul>
+                        }
+                    }
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+
+
+@*  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        @foreach (var item in Model)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:black;">
+                    <i class="@item.ImgUrl"></i>
+
+                    @item.MenuTxt
+
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    @if (item.Children != null && item.Children.Count > 0)
+                    {
+                        @foreach (var child in item.Children)
+                        {
+                            <ul>
+
+                                <li><a class="dropdown-item" href="@child.MenuUrl" style="font-size:small;">@child.MenuTxt</a></li>
+                                @if (child.Children != null && child.Children.Count > 0)
+                                {
+                                    @foreach (var subchild in child.Children)
+                                    {
+                                        <li><a class="dropdown-item submenu" href="@subchild.MenuUrl" style="font-size:12px;margin-bottom:-8px;color:black;">@subchild.MenuTxt</a></li>
+                                    }
+                                }
+                           </ul>
+                        }
+                    }
+                </div>
+            </li>
+        }
+    </ul>
+</div>  *@
+
+ 

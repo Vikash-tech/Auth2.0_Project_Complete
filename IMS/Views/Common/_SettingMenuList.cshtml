@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MenuItem>
+
+<div class="collapse navbar-collapse" id="navbarCollapse1">
+    <ul class="navbar-nav ml-auto">
+        @foreach (var item in Model)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" id="navbarDropdown_@item.MenuId"
+                   aria-haspopup="false" aria-expanded="true" style="color:black;">
+                    <i class="@item.ImgUrl"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" x-placement="top-end" aria-labelledby="navbarDropdown_@item.MenuId">
+                    <div class="dropdown-header noti-title">
+
+                        @if (item.Children != null && item.Children.Count > 0)
+                        {
+                            @foreach (var child in item.Children)
+                            {
+                                <ul class="list-unstyled" style="font-size:small;">
+
+                                    <li><a class="dropdown-item submenu" href="@child.MenuUrl?MenuId=@child.MenuId" style="font-size:12px;color:#0d6efd;margin-bottom:-8px">@child.MenuTxt</a></li>
+                                </ul>
+                            }
+                        }
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
